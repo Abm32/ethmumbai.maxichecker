@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Header, Footer } from './Layout';
 import { EthMumbaiLogo } from './Logo';
@@ -37,7 +36,40 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onStart, onXHandle
   };
 
   return (
-    <div className="relative flex flex-col min-h-screen">
+    <div className="relative flex flex-col min-h-screen overflow-hidden">
+      {/* Mumbai Skyline Bottom Decoration */}
+      <div className="fixed bottom-0 left-0 right-0 h-32 z-0 pointer-events-none">
+        {/* Iconic Mumbai Buildings Silhouette - styled like the official site */}
+        <div className="absolute bottom-10 left-0 right-0 flex items-end justify-around px-4 md:px-8 gap-1 md:gap-2">
+          {/* Gateway of India inspired */}
+          <div className="w-8 md:w-12 h-12 md:h-16 bg-gradient-to-b from-orange-400/30 to-orange-500/50 rounded-t-lg border-t border-orange-300/40"></div>
+          {/* Taj Hotel inspired */}
+          <div className="w-10 md:w-16 h-14 md:h-20 bg-gradient-to-b from-orange-400/30 to-orange-500/50 rounded-t-md border-t border-orange-300/40"></div>
+          {/* Modern skyscrapers */}
+          <div className="w-6 md:w-10 h-16 md:h-22 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
+          <div className="w-7 md:w-10 h-18 md:h-24 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
+          <div className="w-5 md:w-8 h-14 md:h-18 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
+          {/* More buildings */}
+          <div className="w-8 md:w-12 h-15 md:h-20 bg-gradient-to-b from-orange-400/30 to-orange-500/50 rounded-t-lg"></div>
+          <div className="w-6 md:w-10 h-13 md:h-17 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
+          <div className="w-7 md:w-10 h-17 md:h-22 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
+          {/* Extra buildings for fuller skyline */}
+          <div className="w-6 md:w-9 h-14 md:h-19 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
+          <div className="w-8 md:w-11 h-16 md:h-21 bg-gradient-to-b from-orange-400/30 to-orange-500/50 rounded-t-md"></div>
+        </div>
+        {/* Road with yellow-black stripes - iconic Mumbai style */}
+        <div className="absolute bottom-0 left-0 right-0 h-10 bg-gray-800/70">
+          {/* Center line */}
+          <div className="absolute top-1 left-0 right-0 h-0.5 bg-yellow-300/40"></div>
+          {/* Yellow-Black striped border at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-4 flex">
+            {[...Array(50)].map((_, i) => (
+              <div key={i} className={`flex-1 ${i % 2 === 0 ? 'bg-yellow-400' : 'bg-black'}`}></div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <Header xUserInfo={xUserInfo} onLogoClick={onLogoClick} />
 
       <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full px-4 py-6 md:py-4">
@@ -64,6 +96,12 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onStart, onXHandle
             <p className="text-lg md:text-xl font-medium text-white/80 max-w-lg leading-relaxed mt-2">
               Analyze your on-chain history, flex your badges, and prove your unwavering loyalty to the Mumbai ecosystem.
             </p>
+            {/* Mumbai tagline inspired by official site */}
+            <div className="mt-2 px-6 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full">
+              <p className="text-sm font-bold text-white tracking-wide">
+                Build from Mumbai, For the World 🌍
+              </p>
+            </div>
           </div>
 
           {/* X Handle Input */}
