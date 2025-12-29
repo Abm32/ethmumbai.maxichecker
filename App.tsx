@@ -1,15 +1,16 @@
 
-import React, { useState, useCallback, useEffect } from 'react';
-import { AppScreen, UserStats } from './types';
+import React, { useState } from 'react';
+import { AppScreen, UserStats, XUserInfo } from './types';
 import { LandingScreen } from './components/LandingScreen';
 import { QuizScreen } from './components/QuizScreen';
 import { ResultScreen } from './components/ResultScreen';
 import { generateMaxiProfile } from './geminiService';
 import { QUIZ_QUESTIONS } from './constants';
+import { fetchXUserInfo, validateXHandle } from './xService';
 
 const App: React.FC = () => {
   const [screen, setScreen] = useState<AppScreen>(AppScreen.LANDING);
-  const [walletConnected, setWalletConnected] = useState(false);
+  const [xUserInfo, setXUserInfo] = useState<XUserInfo | null>(null);
   const [userStats, setUserStats] = useState<UserStats>({
     score: 0,
     totalQuestions: QUIZ_QUESTIONS.length,
@@ -20,12 +21,24 @@ const App: React.FC = () => {
   // Align threshold with rank labels (80 and above is Ultra)
   const isUltraMaxi = userStats.score >= 80;
 
-  const connectWallet = () => {
+  const handleXHandleSubmit = async (handle: string) => {
+    if (!validateXHandle(handle)) {
+      return false;
+    }
+
     setLoading(true);
-    setTimeout(() => {
-      setWalletConnected(true);
-      setLoading(false);
-    }, 800);
+    try {
+      const userInfo = await fetchXUserInfo(handle);
+      if (userInfo) {
+        setXUserInfo(userInfo);
+        setLoading(false);
+        return true;
+      }
+    } catch (error) {
+      console.error('Error fetching X user info:', error);
+    }
+    setLoading(false);
+    return false;
   };
 
   const handleStartQuiz = () => {
@@ -77,9 +90,10 @@ const App: React.FC = () => {
       {screen === AppScreen.LANDING && (
         <LandingScreen 
           onStart={handleStartQuiz} 
-          onConnect={connectWallet} 
+          onXHandleSubmit={handleXHandleSubmit} 
           onLogoClick={handleGoHome}
-          isConnected={walletConnected} 
+          xUserInfo={xUserInfo}
+          isLoading={loading}
         />
       )}
 
@@ -87,7 +101,7 @@ const App: React.FC = () => {
         <QuizScreen 
           onComplete={handleQuizComplete} 
           onLogoClick={handleGoHome}
-          isConnected={walletConnected}
+          xUserInfo={xUserInfo}
         />
       )}
 
@@ -97,6 +111,7 @@ const App: React.FC = () => {
           onReset={handleReset} 
           onLogoClick={handleGoHome}
           isLoading={loading}
+          xUserInfo={xUserInfo}
         />
       )}
       

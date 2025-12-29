@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Header } from './Layout';
-import { UserStats } from '../types';
+import { UserStats, XUserInfo } from '../types';
 import { EthMumbaiLogo } from './Logo';
 
 interface ResultScreenProps {
@@ -9,6 +9,7 @@ interface ResultScreenProps {
   onReset: () => void;
   onLogoClick: () => void;
   isLoading: boolean;
+  xUserInfo: XUserInfo | null;
 }
 
 const DiamondConfetti = () => {
@@ -32,7 +33,7 @@ const DiamondConfetti = () => {
   );
 };
 
-export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLogoClick, isLoading }) => {
+export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLogoClick, isLoading, xUserInfo }) => {
   const [displayScore, setDisplayScore] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -180,7 +181,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
 
   return (
     <div className="relative flex flex-col min-h-screen">
-      <Header isConnected={true} onLogoClick={onLogoClick} walletLabel="0xKash...8888" />
+      <Header xUserInfo={xUserInfo} onLogoClick={onLogoClick} />
       {isUltraMaxi && <DiamondConfetti />}
       
       <main className="relative z-10 flex-grow flex flex-col items-center justify-center py-8 px-4 w-full max-w-7xl mx-auto">
@@ -249,10 +250,14 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                   <h2 className={`text-3xl font-black italic tracking-tight uppercase leading-none mb-3 break-words transition-colors hover:text-eth-yellow cursor-default ${isUltraMaxi ? 'text-eth-blue' : 'text-white'}`}>
                     {stats.aiTitle || 'GIGA CHAD'}
                   </h2>
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/40 cursor-default group/id">
-                    <div className="size-2 bg-green-500 rounded-full shadow-[0_0_8px_#22c55e] animate-pulse"></div>
-                    <span className="text-gray-300 font-mono text-xs uppercase tracking-wider group-hover/id:text-white">0xKash...8888</span>
-                  </div>
+                  {xUserInfo && (
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/40 cursor-default group/id">
+                      <svg className="w-3 h-3 fill-white/80" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                      </svg>
+                      <span className="text-gray-300 font-medium text-xs tracking-wider group-hover/id:text-white">@{xUserInfo.handle}</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Score Bar */}
@@ -316,7 +321,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
               </h1>
               {isUltraMaxi && (
                 <div className="bg-eth-blue/20 border border-eth-blue/50 p-4 rounded mb-6 animate-pulse">
-                   <span className="text-eth-blue font-bold uppercase text-xs tracking-widest">🏆 ACHIEVEMENT UNLOCKED</span>
+                   <span className="text-white font-bold uppercase text-xs tracking-widest drop-shadow-[0_0_8px_rgba(98,126,234,0.8)]">🏆 ACHIEVEMENT UNLOCKED</span>
                    <p className="text-white font-bold text-lg">ETHMumbai Ultra Maxi</p>
                 </div>
               )}

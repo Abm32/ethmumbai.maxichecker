@@ -22,3 +22,8 @@ export interface UserStats {
   aiTitle?: string;
   aiDescription?: string;
 }
+
+export interface XUserInfo {
+  handle: string;
+  name: string;
+}

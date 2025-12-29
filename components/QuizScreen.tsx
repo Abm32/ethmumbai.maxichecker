@@ -2,14 +2,15 @@
 import React, { useState } from 'react';
 import { Header } from './Layout';
 import { QUIZ_QUESTIONS } from '../constants';
+import { XUserInfo } from '../types';
 
 interface QuizScreenProps {
   onComplete: (score: number, answers: number[]) => void;
   onLogoClick: () => void;
-  isConnected: boolean;
+  xUserInfo: XUserInfo | null;
 }
 
-export const QuizScreen: React.FC<QuizScreenProps> = ({ onComplete, onLogoClick, isConnected }) => {
+export const QuizScreen: React.FC<QuizScreenProps> = ({ onComplete, onLogoClick, xUserInfo }) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
@@ -42,7 +43,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({ onComplete, onLogoClick,
 
   return (
     <div className="relative flex flex-col min-h-screen bg-background-dark/95">
-      <Header isConnected={isConnected} onLogoClick={onLogoClick} walletLabel="0xKash...8888" showProgress />
+      <Header xUserInfo={xUserInfo} onLogoClick={onLogoClick} showProgress />
       
       <main className="relative z-10 flex-grow flex flex-col items-center justify-start py-8 px-4 w-full max-w-6xl mx-auto">
         

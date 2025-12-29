@@ -1,16 +1,15 @@
 
 import React from 'react';
 import { EthMumbaiLogo } from './Logo';
+import { XUserInfo } from '../types';
 
 interface HeaderProps {
-  isConnected?: boolean;
-  onConnect?: () => void;
+  xUserInfo?: XUserInfo | null;
   onLogoClick?: () => void;
-  walletLabel?: string;
   showProgress?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ isConnected, onConnect, onLogoClick, walletLabel = "Connect Wallet", showProgress }) => (
+export const Header: React.FC<HeaderProps> = ({ xUserInfo, onLogoClick, showProgress }) => (
   <header className="relative z-50 flex items-center justify-between px-6 py-6 md:px-12 w-full max-w-[1400px] mx-auto">
     <button 
       onClick={onLogoClick}
@@ -33,17 +32,17 @@ export const Header: React.FC<HeaderProps> = ({ isConnected, onConnect, onLogoCl
         </div>
       )}
       
-      <button 
-        onClick={onConnect}
-        className={`group flex items-center justify-center gap-2 backdrop-blur-md border border-white/20 px-6 py-2.5 rounded-none transition-all duration-300 clip-chamfer ${isConnected ? 'bg-white/20' : 'bg-white/10 hover:bg-white/20'}`}
-      >
-        <span className="text-sm font-bold tracking-wide uppercase">
-          {isConnected ? (walletLabel) : 'Connect Wallet'}
-        </span>
-        <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">
-          {isConnected ? 'account_balance_wallet' : 'arrow_forward'}
-        </span>
-      </button>
+      {xUserInfo && (
+        <div className="group flex items-center gap-2 backdrop-blur-md border border-white/20 px-4 py-2 rounded-none transition-all duration-300 clip-chamfer bg-white/20">
+          <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+          </svg>
+          <div className="flex flex-col">
+            <span className="text-xs font-bold tracking-wide uppercase leading-none">{xUserInfo.name}</span>
+            <span className="text-[10px] text-white/60 font-mono">@{xUserInfo.handle}</span>
+          </div>
+        </div>
+      )}
     </div>
   </header>
 );
@@ -88,10 +87,10 @@ export const Footer: React.FC = () => (
         >
           <svg
             className="w-5 h-5 fill-current"
-            viewBox="0 0 256 256"
+            viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M32 24h192v208h-40v-72h-32v72H32V24zm40 40v32h112V64H72zm0 56v32h112v-32H72z"/>
+            <path d="M18.24.24H5.76A5.76 5.76 0 0 0 0 6v12a5.76 5.76 0 0 0 5.76 5.76h12.48A5.76 5.76 0 0 0 24 18V6A5.76 5.76 0 0 0 18.24.24m.816 17.166v.504a.49.49 0 0 1 .543.48v.568h-5.143v-.569A.49.49 0 0 1 15 17.91v-.504c0-.22.153-.402.358-.458l-.01-4.364c-.158-1.737-1.64-3.098-3.443-3.098s-3.285 1.361-3.443 3.098l-.01 4.358c.228.042.532.208.54.464v.504a.49.49 0 0 1 .543.48v.568H4.392v-.569a.49.49 0 0 1 .543-.479v-.504c0-.253.201-.454.454-.472V9.039h-.49l-.61-2.031H6.93V5.042h9.95v1.966h2.822l-.61 2.03h-.49v7.896c.252.017.453.22.453.472"/>
           </svg>
         </a>
       </div>
