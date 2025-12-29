@@ -12,21 +12,50 @@ interface ResultScreenProps {
   xUserInfo: XUserInfo | null;
 }
 
-const DiamondConfetti = () => {
+const ConfettiAnimation = () => {
+  const colors = ['#ec1313', '#627EEA', '#F7C325', '#ffffff'];
+  
   return (
     <div className="fixed inset-0 pointer-events-none z-[60] overflow-hidden">
-      {[...Array(30)].map((_, i) => (
-        <div 
-          key={i} 
-          className="absolute text-eth-yellow material-symbols-outlined animate-confetti-fall"
-          style={{ 
-            left: `${Math.random() * 100}vw`, 
+      {[...Array(50)].map((_, i) => {
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 8 + 4;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 4;
+        const duration = Math.random() * 2 + 3;
+        
+        return (
+          <div
+            key={i}
+            className="absolute rounded-sm animate-confetti-fall"
+            style={{
+              left: `${left}%`,
+              width: `${size}px`,
+              height: `${size}px`,
+              backgroundColor: color,
+              animationDelay: `${delay}s`,
+              animationDuration: `${duration}s`,
+              opacity: 0.8 + Math.random() * 0.2,
+              transform: `rotate(${Math.random() * 360}deg)`,
+            }}
+          />
+        );
+      })}
+      {/* Add some ETH symbols mixed in */}
+      {[...Array(15)].map((_, i) => (
+        <div
+          key={`eth-${i}`}
+          className="absolute text-eth-blue animate-confetti-fall font-black"
+          style={{
+            left: `${Math.random() * 100}%`,
+            fontSize: `${16 + Math.random() * 12}px`,
             animationDelay: `${Math.random() * 4}s`,
-            fontSize: `${12 + Math.random() * 24}px`,
-            opacity: Math.random()
+            animationDuration: `${3 + Math.random() * 2}s`,
+            opacity: 0.6 + Math.random() * 0.4,
+            transform: `rotate(${Math.random() * 360}deg)`,
           }}
         >
-          diamond
+          Ξ
         </div>
       ))}
     </div>
@@ -272,7 +301,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
   return (
     <div className="relative flex flex-col min-h-screen">
       <Header xUserInfo={xUserInfo} onLogoClick={onLogoClick} />
-      {isUltraMaxi && <DiamondConfetti />}
+      {isUltraMaxi && <ConfettiAnimation />}
       
       <main className="relative z-10 flex-grow flex flex-col items-center justify-center py-8 px-4 w-full max-w-7xl mx-auto">
         {/* Background glows */}
