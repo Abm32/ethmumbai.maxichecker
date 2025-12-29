@@ -36,6 +36,7 @@ const DiamondConfetti = () => {
 export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLogoClick, isLoading, xUserInfo }) => {
   const [displayScore, setDisplayScore] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
   // Use the same threshold as the rank labels for visual consistency
@@ -51,7 +52,10 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
   }, [xUserInfo]);
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading) {
+      setIsAnimationComplete(false);
+      return;
+    }
     let start = 0;
     const end = stats.score;
     const duration = 2000;
@@ -61,6 +65,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
       start += increment;
       if (start >= end) {
         setDisplayScore(end);
+        setIsAnimationComplete(true);
         clearInterval(timer);
       } else {
         setDisplayScore(Math.floor(start));
@@ -88,13 +93,45 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
 
   const captureCard = async (): Promise<string | null> => {
     if (!cardRef.current) return null;
+    
+    // Wait for animation to complete if still animating
+    if (!isAnimationComplete) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    
     try {
       const originalElement = cardRef.current;
       const originalTransform = originalElement.style.transform;
       const originalTransition = originalElement.style.transition;
+      const finalScore = stats.score;
       
+      // Disable animations and set final score for capture
       originalElement.style.transform = 'none';
       originalElement.style.transition = 'none';
+      originalElement.classList.add('no-animations');
+      
+      // Update score and rank displays to final values
+      const scoreElements = originalElement.querySelectorAll('[data-score-display]');
+      scoreElements.forEach((el) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.textContent = `SCORE: ${finalScore.toLocaleString()} / 100`;
+      });
+      
+      const rankElements = originalElement.querySelectorAll('[data-rank-display]');
+      rankElements.forEach((el) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.textContent = getRankText(finalScore);
+      });
+      
+      // Hide or disable animated dots
+      const animatedDotsElements = originalElement.querySelectorAll('[data-animated-dots]');
+      animatedDotsElements.forEach((el) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.style.display = 'none';
+      });
+
+      // Wait for DOM to update
+      await new Promise(resolve => setTimeout(resolve, 50));
 
       if (!(window as any).html2canvas) {
         throw new Error("html2canvas library not loaded");
@@ -106,10 +143,55 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
         useCORS: true,
         allowTaint: true,
         logging: false,
+        onclone: (clonedDoc: Document) => {
+          // Ensure final values are shown in cloned document
+          const clonedElement = clonedDoc.querySelector('[data-card-ref]') as HTMLElement;
+          if (clonedElement) {
+            clonedElement.classList.add('no-animations');
+            // Disable all animations in cloned document
+            const style = clonedDoc.createElement('style');
+            style.textContent = `
+              .no-animations * {
+                animation: none !important;
+                transition: none !important;
+              }
+            `;
+            clonedDoc.head.appendChild(style);
+            
+            // Update score displays
+            const scoreDisplays = clonedElement.querySelectorAll('[data-score-display]');
+            scoreDisplays.forEach((el) => {
+              const htmlEl = el as HTMLElement;
+              htmlEl.textContent = `SCORE: ${finalScore.toLocaleString()} / 100`;
+            });
+            
+            // Update rank displays
+            const rankDisplays = clonedElement.querySelectorAll('[data-rank-display]');
+            rankDisplays.forEach((el) => {
+              const htmlEl = el as HTMLElement;
+              htmlEl.textContent = getRankText(finalScore);
+            });
+            
+            // Hide animated dots in cloned document
+            const clonedAnimatedDots = clonedElement.querySelectorAll('[data-animated-dots]');
+            clonedAnimatedDots.forEach((el) => {
+              const htmlEl = el as HTMLElement;
+              htmlEl.style.display = 'none';
+            });
+          }
+        }
       });
       
+      // Restore animated dots visibility
+      animatedDotsElements.forEach((el) => {
+        const htmlEl = el as HTMLElement;
+        htmlEl.style.display = '';
+      });
+      
+      // Restore original styles
       originalElement.style.transform = originalTransform;
       originalElement.style.transition = originalTransition;
+      originalElement.classList.remove('no-animations');
       
       return canvas.toDataURL('image/png', 1.0);
     } catch (err) {
@@ -203,6 +285,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
           <div className="flex justify-center lg:justify-end perspective-1000 order-2 lg:order-1">
             <div 
               ref={cardRef}
+              data-card-ref
               className={`relative w-[320px] sm:w-[350px] h-[600px] bg-neutral-900 clip-chamfer border-[6px] shadow-[0_20px_60px_-15px_rgba(236,19,19,0.5)] flex flex-col group transition-all duration-500 hover:scale-[1.02] ${
               isUltraMaxi ? 'border-eth-blue shadow-[0_25px_80px_-10px_rgba(98,126,234,0.7)]' : 'border-[#3A1E1E]'
             }`}>
@@ -227,15 +310,15 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                   </div>
                 </div>
                 <div className="relative z-10 flex flex-col items-end">
-                  <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Valid Thru</span>
-                  <span className={`text-white font-mono text-sm border-b pb-0.5 ${isUltraMaxi ? 'border-eth-blue' : 'border-primary/40'}`}>MAR 2025</span>
+                  <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Status</span>
+                  <span className={`text-white font-mono text-sm border-b pb-0.5 ${isUltraMaxi ? 'border-eth-blue' : 'border-primary/40'}`}>ACTIVE</span>
                 </div>
               </div>
 
               {/* Card Body */}
               <div className="flex-1 bg-[#1a0a0a] relative flex flex-col items-center pt-8">
                 {/* Profile Image with Rank Badge */}
-                <div className="relative mb-6">
+                <div className="relative mb-6 flex flex-col items-center">
                   {/* Profile Image Circle */}
                   <div className={`relative size-40 rounded-full overflow-hidden border-4 transition-all duration-1000 shadow-[0_0_30px_rgba(0,0,0,0.3)] ${
                     isUltraMaxi ? 'border-eth-blue shadow-[0_0_40px_rgba(98,126,234,0.6)]' : 'border-primary'
@@ -303,16 +386,16 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                   </div>
                   
                   {/* Rank Badge Overlay */}
-                  <div className={`absolute -bottom-3 left-1/2 -translate-x-1/2 px-5 py-2 rounded-full border-2 transition-all duration-1000 shadow-lg backdrop-blur-sm ${
+                  <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 px-5 py-2 rounded-full border-2 transition-all duration-1000 shadow-lg backdrop-blur-sm ${
                     isUltraMaxi 
                       ? 'bg-eth-blue/90 border-eth-yellow shadow-[0_0_20px_rgba(98,126,234,0.6)]' 
                       : 'bg-primary/90 border-eth-yellow shadow-[0_0_20px_rgba(236,19,19,0.6)]'
                   }`}>
-                    <div className="flex flex-col items-center">
-                      <span className="text-xs font-black text-white tracking-wider uppercase leading-none">
+                    <div className="flex flex-col items-center justify-center">
+                      <span className="text-xs font-black text-white tracking-wider uppercase leading-none text-center whitespace-nowrap" data-rank-display>
                         {getRankText(displayScore)}
                       </span>
-                      <div className="flex gap-1 mt-1">
+                      <div className="flex gap-1 mt-1 justify-center items-center" data-animated-dots>
                         <span className="size-1.5 bg-eth-yellow rounded-full animate-blink-yellow"></span>
                         <span className="size-1.5 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.2s' }}></span>
                         <span className="size-1.5 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.4s' }}></span>
@@ -322,12 +405,12 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                 </div>
 
                 {/* User Info */}
-                <div className="w-full px-8 text-center mt-2 mb-8">
+                <div className="w-full px-8 text-center mt-2 mb-8 flex flex-col items-center">
                   <h2 className={`text-3xl font-black italic tracking-tight uppercase leading-none mb-3 break-words transition-colors hover:text-eth-yellow cursor-default ${isUltraMaxi ? 'text-eth-blue' : 'text-white'}`}>
                     {stats.aiTitle || 'GIGA CHAD'}
                   </h2>
                   {xUserInfo && (
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/40 cursor-default group/id">
+                    <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/40 cursor-default group/id">
                       {xUserInfo.profileImageUrl ? (
                         <img 
                           src={xUserInfo.profileImageUrl} 
@@ -352,7 +435,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                 <div className="w-full h-14 bg-eth-yellow relative flex items-center justify-center overflow-hidden shadow-[0_10px_30px_rgba(247,195,37,0.2)] border-y-2 border-white/20 transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_25px_rgba(247,195,37,0.4)] group/score cursor-default">
                   <div className="absolute inset-0 opacity-20 transition-transform duration-500 group-hover/score:scale-110" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, #000 10px, #000 20px)' }}></div>
                   <div className="relative z-10 flex flex-col items-center">
-                    <span className="text-black font-black text-xl tracking-[0.2em] uppercase leading-none transition-transform duration-300 group-hover/score:scale-105">
+                    <span className="text-black font-black text-xl tracking-[0.2em] uppercase leading-none transition-transform duration-300 group-hover/score:scale-105" data-score-display>
                       SCORE: {displayScore.toLocaleString()} / 100
                     </span>
                     <span className="text-black/60 text-[8px] font-bold uppercase tracking-widest mt-1">Proof of Loyalty</span>

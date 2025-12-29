@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppScreen, UserStats, XUserInfo } from './types';
 import { LandingScreen } from './components/LandingScreen';
 import { QuizScreen } from './components/QuizScreen';
@@ -8,18 +8,71 @@ import { generateMaxiProfile } from './geminiService';
 import { QUIZ_QUESTIONS } from './constants';
 import { fetchXUserInfo, validateXHandle } from './xService';
 
+const STORAGE_KEYS = {
+  SCREEN: 'ethmumbai_screen',
+  USER_STATS: 'ethmumbai_user_stats',
+  X_USER_INFO: 'ethmumbai_x_user_info',
+};
+
 const App: React.FC = () => {
-  const [screen, setScreen] = useState<AppScreen>(AppScreen.LANDING);
-  const [xUserInfo, setXUserInfo] = useState<XUserInfo | null>(null);
-  const [userStats, setUserStats] = useState<UserStats>({
-    score: 0,
-    totalQuestions: QUIZ_QUESTIONS.length,
-    answers: [],
-  });
+  // Load initial state from localStorage
+  const loadInitialScreen = (): AppScreen => {
+    const saved = localStorage.getItem(STORAGE_KEYS.SCREEN);
+    return (saved as AppScreen) || AppScreen.LANDING;
+  };
+
+  const loadInitialUserStats = (): UserStats => {
+    const saved = localStorage.getItem(STORAGE_KEYS.USER_STATS);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error('Failed to parse saved user stats:', e);
+      }
+    }
+    return {
+      score: 0,
+      totalQuestions: QUIZ_QUESTIONS.length,
+      answers: [],
+    };
+  };
+
+  const loadInitialXUserInfo = (): XUserInfo | null => {
+    const saved = localStorage.getItem(STORAGE_KEYS.X_USER_INFO);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error('Failed to parse saved X user info:', e);
+      }
+    }
+    return null;
+  };
+
+  const [screen, setScreen] = useState<AppScreen>(loadInitialScreen);
+  const [xUserInfo, setXUserInfo] = useState<XUserInfo | null>(loadInitialXUserInfo);
+  const [userStats, setUserStats] = useState<UserStats>(loadInitialUserStats);
   const [loading, setLoading] = useState(false);
 
   // Align threshold with rank labels (80 and above is Ultra)
   const isUltraMaxi = userStats.score >= 80;
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.SCREEN, screen);
+  }, [screen]);
+
+  useEffect(() => {
+    if (userStats.score > 0 || userStats.aiTitle) {
+      localStorage.setItem(STORAGE_KEYS.USER_STATS, JSON.stringify(userStats));
+    }
+  }, [userStats]);
+
+  useEffect(() => {
+    if (xUserInfo) {
+      localStorage.setItem(STORAGE_KEYS.X_USER_INFO, JSON.stringify(xUserInfo));
+    }
+  }, [xUserInfo]);
 
   const handleXHandleSubmit = async (handle: string) => {
     if (!validateXHandle(handle)) {
@@ -69,6 +122,9 @@ const App: React.FC = () => {
       answers: [],
     });
     setScreen(AppScreen.LANDING);
+    // Clear saved state
+    localStorage.removeItem(STORAGE_KEYS.USER_STATS);
+    localStorage.removeItem(STORAGE_KEYS.SCREEN);
   };
 
   const handleGoHome = () => {
