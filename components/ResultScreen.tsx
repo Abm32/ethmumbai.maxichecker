@@ -42,6 +42,14 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
   const isUltraMaxi = stats.score >= 80;
   const isHighEnoughForEasterEgg = stats.score > 85;
 
+  // Debug: Log xUserInfo to check if profileImageUrl is set
+  useEffect(() => {
+    if (xUserInfo) {
+      console.log('X User Info:', xUserInfo);
+      console.log('Profile Image URL:', xUserInfo.profileImageUrl);
+    }
+  }, [xUserInfo]);
+
   useEffect(() => {
     if (isLoading) return;
     let start = 0;
@@ -226,21 +234,89 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
 
               {/* Card Body */}
               <div className="flex-1 bg-[#1a0a0a] relative flex flex-col items-center pt-8">
-                {/* Level Hexagon Style Badge */}
-                <div className="relative size-48 mb-6 transition-all duration-300 hover:scale-110 cursor-help group/badge">
-                  <div className={`absolute inset-0 bg-gradient-to-br rotate-45 rounded-xl border-4 border-[#3A1E1E] transition-all duration-1000 group-hover/badge:rotate-[48deg] ${
-                    isUltraMaxi ? 'from-eth-blue to-[#1a224a] ultra-glow shadow-[0_0_40px_rgba(98,126,234,0.5)]' : 'from-primary to-[#800000] shadow-[0_0_40px_rgba(236,19,19,0.4)]'
-                  }`}></div>
-                  <div className="absolute inset-2 border border-white/30 rotate-45 rounded-lg opacity-50 transition-all duration-1000 group-hover/badge:rotate-[48deg]"></div>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 pointer-events-none">
-                    <span className="text-[10px] text-white/60 uppercase tracking-[0.2em] mb-1 font-bold">Maxi Rank</span>
-                    <span className="text-4xl font-black text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]">
-                      {getRankText(displayScore)}
-                    </span>
-                    <div className="flex gap-1.5 mt-2">
-                      <span className="size-2 bg-eth-yellow rounded-full animate-blink-yellow"></span>
-                      <span className="size-2 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.2s' }}></span>
-                      <span className="size-2 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.4s' }}></span>
+                {/* Profile Image with Rank Badge */}
+                <div className="relative mb-6">
+                  {/* Profile Image Circle */}
+                  <div className={`relative size-40 rounded-full overflow-hidden border-4 transition-all duration-1000 shadow-[0_0_30px_rgba(0,0,0,0.3)] ${
+                    isUltraMaxi ? 'border-eth-blue shadow-[0_0_40px_rgba(98,126,234,0.6)]' : 'border-primary'
+                  }`}>
+                    {xUserInfo?.profileImageUrl ? (
+                      <>
+                        <img 
+                          src={(() => {
+                            let url = xUserInfo.profileImageUrl;
+                            // Convert to higher resolution if possible
+                            if (url.includes('_normal')) {
+                              url = url.replace('_normal', '_400x400');
+                            } else if (url.includes('_200x200')) {
+                              url = url.replace('_200x200', '_400x400');
+                            }
+                            console.log('Loading profile image from:', url);
+                            return url;
+                          })()}
+                          alt={xUserInfo.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            console.error('Profile image failed to load:', e);
+                            const target = e.target as HTMLImageElement;
+                            // Try original URL
+                            if (target.src !== xUserInfo.profileImageUrl) {
+                              console.log('Trying original URL:', xUserInfo.profileImageUrl);
+                              target.src = xUserInfo.profileImageUrl;
+                            } else {
+                              // Show placeholder if image fails
+                              target.style.display = 'none';
+                              const placeholder = target.nextElementSibling as HTMLElement;
+                              if (placeholder) placeholder.style.display = 'flex';
+                            }
+                          }}
+                          onLoad={() => {
+                            console.log('Profile image loaded successfully');
+                            const placeholder = document.querySelector('.profile-placeholder') as HTMLElement;
+                            if (placeholder) placeholder.style.display = 'none';
+                          }}
+                        />
+                        <div className="profile-placeholder hidden w-full h-full bg-gradient-to-br from-neutral-800 to-neutral-900 flex items-center justify-center absolute inset-0">
+                          {xUserInfo.name ? (
+                            <span className="text-2xl font-black text-white/60">
+                              {xUserInfo.name.charAt(0).toUpperCase()}
+                            </span>
+                          ) : (
+                            <span className="material-symbols-outlined text-6xl text-white/20">person</span>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-neutral-800 to-neutral-900 flex items-center justify-center">
+                        {xUserInfo?.name ? (
+                          <span className="text-2xl font-black text-white/60">
+                            {xUserInfo.name.charAt(0).toUpperCase()}
+                          </span>
+                        ) : (
+                          <span className="material-symbols-outlined text-6xl text-white/20">person</span>
+                        )}
+                      </div>
+                    )}
+                    <div className={`absolute inset-0 bg-gradient-to-t opacity-20 ${
+                      isUltraMaxi ? 'from-eth-blue' : 'from-primary'
+                    }`}></div>
+                  </div>
+                  
+                  {/* Rank Badge Overlay */}
+                  <div className={`absolute -bottom-3 left-1/2 -translate-x-1/2 px-5 py-2 rounded-full border-2 transition-all duration-1000 shadow-lg backdrop-blur-sm ${
+                    isUltraMaxi 
+                      ? 'bg-eth-blue/90 border-eth-yellow shadow-[0_0_20px_rgba(98,126,234,0.6)]' 
+                      : 'bg-primary/90 border-eth-yellow shadow-[0_0_20px_rgba(236,19,19,0.6)]'
+                  }`}>
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-black text-white tracking-wider uppercase leading-none">
+                        {getRankText(displayScore)}
+                      </span>
+                      <div className="flex gap-1 mt-1">
+                        <span className="size-1.5 bg-eth-yellow rounded-full animate-blink-yellow"></span>
+                        <span className="size-1.5 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.2s' }}></span>
+                        <span className="size-1.5 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.4s' }}></span>
+                      </div>
                     </div>
                   </div>
                 </div>

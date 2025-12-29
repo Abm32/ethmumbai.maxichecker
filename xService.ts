@@ -35,7 +35,13 @@ export const fetchXUserInfo = async (handle: string): Promise<XUserInfo | null> 
     // Otherwise, it will fall back to oEmbed API
     try {
       // Try the API route (works in production and with Vercel dev)
-      const apiUrl = '/api/twitter-user';
+      // In local dev, try both localhost:3000 and relative path
+      const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const apiUrl = isLocalDev 
+        ? `http://localhost:3000/api/twitter-user`
+        : '/api/twitter-user';
+      
+      console.log('Fetching from API:', apiUrl);
       const response = await fetch(`${apiUrl}?handle=${encodeURIComponent(normalizedHandle)}`, {
         method: 'GET',
         headers: {
@@ -45,18 +51,26 @@ export const fetchXUserInfo = async (handle: string): Promise<XUserInfo | null> 
       
       if (response.ok) {
         const data = await response.json();
+        console.log('Twitter API response:', data);
         if (data.handle && !data.error) {
-          return {
+          const userInfo = {
             handle: data.handle,
             name: data.name || normalizedHandle,
             profileImageUrl: data.profileImageUrl,
           };
+          console.log('Returning user info:', userInfo);
+          return userInfo;
+        } else {
+          console.warn('API returned error or missing handle:', data);
         }
+      } else {
+        const errorText = await response.text();
+        console.error('API route error:', response.status, errorText);
       }
     } catch (proxyError) {
       // API route not available (e.g., local dev without Vercel CLI)
       // Will fall through to oEmbed fallback
-      console.warn('Twitter API proxy not available, using fallback');
+      console.warn('Twitter API proxy not available, using fallback:', proxyError);
     }
     
     // Fallback: Use Twitter oEmbed API (doesn't require auth but has limited data)

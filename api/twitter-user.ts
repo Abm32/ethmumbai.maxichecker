@@ -54,10 +54,29 @@ export default async function handler(
     const data = await twitterResponse.json();
     
     if (data.data) {
+      // Handle profile image URL - convert to higher resolution
+      let profileImageUrl = data.data.profile_image_url;
+      if (profileImageUrl) {
+        // Replace _normal with _400x400 for better quality
+        if (profileImageUrl.includes('_normal')) {
+          profileImageUrl = profileImageUrl.replace('_normal', '_400x400');
+        } else if (profileImageUrl.includes('_200x200')) {
+          profileImageUrl = profileImageUrl.replace('_200x200', '_400x400');
+        }
+        // Ensure HTTPS
+        profileImageUrl = profileImageUrl.replace('http://', 'https://');
+      }
+      
+      console.log('Twitter user data:', {
+        handle: handle.toLowerCase(),
+        name: data.data.name,
+        profileImageUrl: profileImageUrl
+      });
+      
       response.status(200).json({
         handle: handle.toLowerCase(),
         name: data.data.name || handle,
-        profileImageUrl: data.data.profile_image_url?.replace('_normal', '_400x400') || undefined,
+        profileImageUrl: profileImageUrl || undefined,
       });
     } else {
       response.status(404).json({ error: 'User not found' });
