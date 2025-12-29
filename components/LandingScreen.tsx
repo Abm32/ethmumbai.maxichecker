@@ -37,42 +37,109 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onStart, onXHandle
 
   return (
     <div className="relative flex flex-col min-h-screen overflow-hidden">
-      {/* Mumbai Skyline Bottom Decoration */}
-      <div className="fixed bottom-0 left-0 right-0 h-32 z-0 pointer-events-none">
-        {/* Iconic Mumbai Buildings Silhouette - styled like the official site */}
-        <div className="absolute bottom-10 left-0 right-0 flex items-end justify-around px-4 md:px-8 gap-1 md:gap-2">
-          {/* Gateway of India inspired */}
-          <div className="w-8 md:w-12 h-12 md:h-16 bg-gradient-to-b from-orange-400/30 to-orange-500/50 rounded-t-lg border-t border-orange-300/40"></div>
-          {/* Taj Hotel inspired */}
-          <div className="w-10 md:w-16 h-14 md:h-20 bg-gradient-to-b from-orange-400/30 to-orange-500/50 rounded-t-md border-t border-orange-300/40"></div>
-          {/* Modern skyscrapers */}
-          <div className="w-6 md:w-10 h-16 md:h-22 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
-          <div className="w-7 md:w-10 h-18 md:h-24 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
-          <div className="w-5 md:w-8 h-14 md:h-18 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
-          {/* More buildings */}
-          <div className="w-8 md:w-12 h-15 md:h-20 bg-gradient-to-b from-orange-400/30 to-orange-500/50 rounded-t-lg"></div>
-          <div className="w-6 md:w-10 h-13 md:h-17 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
-          <div className="w-7 md:w-10 h-17 md:h-22 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
-          {/* Extra buildings for fuller skyline */}
-          <div className="w-6 md:w-9 h-14 md:h-19 bg-gradient-to-b from-orange-400/30 to-orange-500/50"></div>
-          <div className="w-8 md:w-11 h-16 md:h-21 bg-gradient-to-b from-orange-400/30 to-orange-500/50 rounded-t-md"></div>
+      {/* Mumbai Skyline - Top Layer */}
+      <div className="fixed top-0 left-0 right-0 bottom-0 z-0 pointer-events-none">
+        {/* Left side buildings - Gateway of India area */}
+        <div className="absolute left-0 bottom-32 md:bottom-40 w-48 md:w-72 h-40 md:h-56 opacity-50">
+          {/* Gateway of India inspired structure */}
+          <svg viewBox="0 0 200 200" className="w-full h-full fill-current text-red-950/80">
+            {/* Main arch structure */}
+            <rect x="40" y="120" width="120" height="80" />
+            <rect x="50" y="100" width="100" height="20" />
+            {/* Central dome */}
+            <circle cx="100" cy="80" r="25" />
+            <rect x="90" y="80" width="20" height="40" />
+            {/* Side towers */}
+            <rect x="30" y="140" width="15" height="60" />
+            <rect x="155" y="140" width="15" height="60" />
+            {/* Arches */}
+            <circle cx="70" cy="160" r="15" fill="currentColor" opacity="0.3" />
+            <circle cx="100" cy="160" r="15" fill="currentColor" opacity="0.3" />
+            <circle cx="130" cy="160" r="15" fill="currentColor" opacity="0.3" />
+            {/* Windows */}
+            <rect x="60" y="130" width="8" height="12" fill="currentColor" opacity="0.4" />
+            <rect x="75" y="130" width="8" height="12" fill="currentColor" opacity="0.4" />
+            <rect x="117" y="130" width="8" height="12" fill="currentColor" opacity="0.4" />
+            <rect x="132" y="130" width="8" height="12" fill="currentColor" opacity="0.4" />
+          </svg>
         </div>
-        {/* Road with yellow-black stripes - iconic Mumbai style */}
-        <div className="absolute bottom-0 left-0 right-0 h-10 bg-gray-800/70">
-          {/* Center line */}
-          <div className="absolute top-1 left-0 right-0 h-0.5 bg-yellow-300/40"></div>
-          {/* Yellow-Black striped border at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-4 flex">
-            {[...Array(50)].map((_, i) => (
-              <div key={i} className={`flex-1 ${i % 2 === 0 ? 'bg-yellow-400' : 'bg-black'}`}></div>
+
+        {/* Right side - Bandra-Worli Sea Link Bridge */}
+        <div className="absolute right-0 bottom-32 md:bottom-40 w-64 md:w-96 h-32 md:h-48 opacity-50">
+          <svg viewBox="0 0 300 150" className="w-full h-full">
+            {/* Bridge cables */}
+            <g className="stroke-current text-red-950/80" fill="none">
+              {/* Main towers */}
+              <line x1="220" y1="40" x2="220" y2="150" strokeWidth="4" />
+              <line x1="210" y1="40" x2="210" y2="150" strokeWidth="4" />
+              {/* Cables from left tower */}
+              {[...Array(15)].map((_, i) => (
+                <line key={`left-${i}`} x1="210" y1="40" x2={150 - i * 10} y2="145" strokeWidth="1" opacity="0.6" />
+              ))}
+              {/* Cables from right tower */}
+              {[...Array(15)].map((_, i) => (
+                <line key={`right-${i}`} x1="220" y1="40" x2={230 + i * 5} y2="145" strokeWidth="1" opacity="0.6" />
+              ))}
+            </g>
+            {/* Road deck */}
+            <rect x="0" y="145" width="300" height="6" className="fill-current text-red-950/80" />
+          </svg>
+        </div>
+
+        {/* Center buildings skyline */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-32 md:bottom-40 flex items-end gap-2 md:gap-4 opacity-40">
+          {/* Modern skyscrapers */}
+          <div className="w-8 md:w-12 h-24 md:h-32 bg-red-950/70">
+            <div className="grid grid-cols-2 gap-1 p-1">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="w-full h-2 bg-red-800/40"></div>
+              ))}
+            </div>
+          </div>
+          <div className="w-6 md:w-10 h-20 md:h-28 bg-red-950/70">
+            <div className="grid grid-cols-2 gap-1 p-1">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="w-full h-2 bg-red-800/40"></div>
+              ))}
+            </div>
+          </div>
+          <div className="w-10 md:w-14 h-32 md:h-40 bg-red-950/70">
+            <div className="grid grid-cols-2 gap-1 p-1">
+              {[...Array(10)].map((_, i) => (
+                <div key={i} className="w-full h-2 bg-red-800/40"></div>
+              ))}
+            </div>
+          </div>
+          <div className="w-7 md:w-11 h-28 md:h-36 bg-red-950/70"></div>
+          <div className="w-9 md:w-13 h-26 md:h-34 bg-red-950/70"></div>
+        </div>
+      </div>
+
+      {/* Decorative Yellow Border Pattern - Bottom */}
+      <div className="fixed bottom-0 left-0 right-0 h-20 md:h-24 z-0 pointer-events-none bg-gradient-to-t from-yellow-500 to-yellow-400">
+        {/* Diagonal stripe pattern */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="flex h-full">
+            {[...Array(60)].map((_, i) => (
+              <div
+                key={i}
+                className="flex-1 bg-black transform -skew-x-12 origin-bottom"
+                style={{ 
+                  height: i % 2 === 0 ? '100%' : '60%',
+                  marginTop: i % 2 === 0 ? '0' : 'auto'
+                }}
+              ></div>
             ))}
           </div>
         </div>
+        {/* Top border lines */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-black"></div>
+        <div className="absolute top-2 left-0 right-0 h-1 bg-red-900"></div>
       </div>
 
       <Header xUserInfo={xUserInfo} onLogoClick={onLogoClick} />
 
-      <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full px-4 py-6 md:py-4">
+      <main className="relative z-10 flex flex-col items-center justify-center flex-grow w-full px-4 py-6 md:py-4 pb-32">
         <div className="flex flex-col items-center justify-center w-full max-w-5xl mx-auto gap-8 md:gap-10">
           
           {/* Main Diamond Illustration */}
@@ -93,15 +160,9 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onStart, onXHandle
             <h1 className="text-5xl md:text-7xl font-black leading-[0.9] tracking-tighter uppercase drop-shadow-lg text-white">
               How <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70">ETHMumbai</span><br/> Are You?
             </h1>
-            <p className="text-lg md:text-xl font-medium text-white/80 max-w-lg leading-relaxed mt-2">
-              Analyze your on-chain history, flex your badges, and prove your unwavering loyalty to the Mumbai ecosystem.
+            <p className="text-lg md:text-xl font-medium text-white/90 max-w-lg leading-relaxed mt-2">
+              Analyze your on-chain history, flex your badges, and prove your unwavering loyalty to the community.
             </p>
-            {/* Mumbai tagline inspired by official site */}
-            <div className="mt-2 px-6 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full">
-              <p className="text-sm font-bold text-white tracking-wide">
-                Build from Mumbai, For the World 🌍
-              </p>
-            </div>
           </div>
 
           {/* X Handle Input */}
@@ -150,17 +211,14 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onStart, onXHandle
             <div className="relative mt-2">
               <button 
                 onClick={onStart}
-                className="relative group w-44 h-44 md:w-52 md:h-52 flex items-center justify-center bg-white text-primary font-black text-xl md:text-2xl uppercase tracking-tighter transform rotate-45 hover:scale-110 shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all duration-300 border-4 border-transparent hover:border-eth-blue focus:outline-none focus:ring-4 focus:ring-eth-blue/50 btn-mechanical"
+                className="relative group w-44 h-44 md:w-52 md:h-52 flex items-center justify-center bg-white/10 backdrop-blur-md text-white border-2 border-white/30 font-black text-xl md:text-2xl uppercase tracking-tighter transform rotate-45 hover:scale-110 hover:bg-white/20 shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-white/50"
               >
                 <div className="transform -rotate-45 text-center px-4 leading-none flex flex-col items-center gap-2">
-                  <span>Check My</span>
-                  <span className="text-2xl md:text-3xl border-b-4 border-primary pb-1">Maxi Score</span>
+                  <span className="text-base md:text-lg">Check My</span>
+                  <span className="text-2xl md:text-3xl border-b-4 border-white pb-1">Maxi Score</span>
                   <span className="material-symbols-outlined mt-2 text-3xl animate-bounce">expand_more</span>
                 </div>
               </button>
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 text-white/40 text-sm font-mono tracking-widest uppercase whitespace-nowrap">
-                Click to start scan
-              </div>
             </div>
           )}
         </div>

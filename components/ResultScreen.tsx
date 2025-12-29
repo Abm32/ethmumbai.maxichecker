@@ -252,9 +252,21 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                   </h2>
                   {xUserInfo && (
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/40 cursor-default group/id">
-                      <svg className="w-3 h-3 fill-white/80" viewBox="0 0 24 24">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-                      </svg>
+                      {xUserInfo.profileImageUrl ? (
+                        <img 
+                          src={xUserInfo.profileImageUrl} 
+                          alt={xUserInfo.name}
+                          className="w-4 h-4 rounded-full border border-white/20 object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                          }}
+                        />
+                      ) : null}
+                      {!xUserInfo.profileImageUrl && (
+                        <svg className="w-3 h-3 fill-white/80" viewBox="0 0 24 24">
+                          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                        </svg>
+                      )}
                       <span className="text-gray-300 font-medium text-xs tracking-wider group-hover/id:text-white">@{xUserInfo.handle}</span>
                     </div>
                   )}

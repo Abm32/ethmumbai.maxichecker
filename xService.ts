@@ -1,9 +1,10 @@
 // Service to fetch X (Twitter) user information
-// Note: This uses a public API endpoint. For production, you might want to use Twitter API v2 with proper authentication
+// Uses Twitter API v2 or fallback methods to fetch user profile data
 
 export interface XUserInfo {
   handle: string;
   name: string;
+  profileImageUrl?: string;
 }
 
 /**
@@ -16,7 +17,7 @@ export const normalizeXHandle = (handle: string): string => {
 };
 
 /**
- * Fetches X user information by handle
+ * Fetches X user information by handle using Twitter API v2
  * @param handle - The X handle (without @)
  * @returns User info or null if not found
  */
@@ -28,38 +29,66 @@ export const fetchXUserInfo = async (handle: string): Promise<XUserInfo | null> 
   }
 
   try {
-    // Using a public API endpoint (you may want to replace this with Twitter API v2 in production)
-    // For now, we'll simulate fetching user data
-    // In production, you'd use: https://api.twitter.com/2/users/by/username/:username
-    
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // For demo purposes, we'll return mock data
-    // In production, replace this with actual Twitter API call:
-    /*
-    const response = await fetch(`https://api.twitter.com/2/users/by/username/${normalizedHandle}?user.fields=name`, {
-      headers: {
-        'Authorization': `Bearer ${TWITTER_BEARER_TOKEN}`,
-      },
-    });
-    
-    if (!response.ok) {
-      return null;
+    // Use our Vercel serverless function to proxy Twitter API requests (solves CORS)
+    // In production, this will be /api/twitter-user
+    // In local dev with Vercel CLI: vercel dev, it will work
+    // Otherwise, it will fall back to oEmbed API
+    try {
+      // Try the API route (works in production and with Vercel dev)
+      const apiUrl = '/api/twitter-user';
+      const response = await fetch(`${apiUrl}?handle=${encodeURIComponent(normalizedHandle)}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.handle && !data.error) {
+          return {
+            handle: data.handle,
+            name: data.name || normalizedHandle,
+            profileImageUrl: data.profileImageUrl,
+          };
+        }
+      }
+    } catch (proxyError) {
+      // API route not available (e.g., local dev without Vercel CLI)
+      // Will fall through to oEmbed fallback
+      console.warn('Twitter API proxy not available, using fallback');
     }
     
-    const data = await response.json();
-    return {
-      handle: normalizedHandle,
-      name: data.data.name || normalizedHandle,
-    };
-    */
+    // Fallback: Use Twitter oEmbed API (doesn't require auth but has limited data)
+    try {
+      const oEmbedResponse = await fetch(
+        `https://publish.twitter.com/oembed?url=https://twitter.com/${normalizedHandle}`,
+        {
+          headers: {
+            'Accept': 'application/json',
+          },
+        }
+      );
+      
+      if (oEmbedResponse.ok) {
+        const oEmbedData = await oEmbedResponse.json();
+        // Extract name from author_name in oEmbed response
+        const name = oEmbedData.author_name || normalizedHandle;
+        
+        return {
+          handle: normalizedHandle,
+          name: name,
+          // oEmbed doesn't provide profile image, so we'll use a default or leave it undefined
+        };
+      }
+    } catch (oEmbedError) {
+      console.warn('oEmbed fallback failed:', oEmbedError);
+    }
     
-    // Mock implementation for now
-    // You can replace this with actual Twitter API integration
+    // Final fallback: Return basic info with handle
     return {
       handle: normalizedHandle,
-      name: normalizedHandle.charAt(0).toUpperCase() + normalizedHandle.slice(1), // Capitalize first letter as mock name
+      name: normalizedHandle.charAt(0).toUpperCase() + normalizedHandle.slice(1),
     };
   } catch (error) {
     console.error('Error fetching X user info:', error);

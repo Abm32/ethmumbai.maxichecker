@@ -17,53 +17,53 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
         if (typeof tailwind !== 'undefined') {
-            tailwind.config = {
-                darkMode: "class",
-                theme: {
-                    extend: {
-                        colors: {
-                            "primary": "#ec1313",
-                            "background-light": "#f8f6f6",
-                            "background-dark": "#221010",
-                            "eth-blue": "#627EEA",
-                            "eth-yellow": "#F7C325",
-                        },
-                        fontFamily: {
-                            "display": ["Space Grotesk", "sans-serif"],
-                            "body": ["Noto Sans", "sans-serif"],
-                        },
-                        animation: {
-                            'float': 'float 6s ease-in-out infinite',
-                            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                            'blink-yellow': 'blinkYellow 2s ease-in-out infinite',
-                            'confetti-fall': 'confettiFall 4s linear infinite',
-                            'shimmer-wave': 'shimmerWave 4s linear infinite',
-                            'subtle-wave': 'subtleWave 3s ease-in-out infinite',
-                        },
-                        keyframes: {
-                            float: {
-                                '0%, 100%': { transform: 'translateY(0)' },
-                                '50%': { transform: 'translateY(-15px)' },
-                            },
-                            blinkYellow: {
-                                '0%, 100%': { opacity: 1, filter: 'drop-shadow(0 0 10px #F7C325)' },
-                                '50%': { opacity: 0.4, filter: 'drop-shadow(0 0 2px #F7C325)' },
-                            },
-                            confettiFall: {
-                                '0%': { transform: 'translateY(-10vh) rotate(0deg)', opacity: 1 },
-                                '100%': { transform: 'translateY(110vh) rotate(720deg)', opacity: 0 },
-                            },
-                            shimmerWave: {
-                                '0%': { backgroundPosition: '-200% center' },
-                                '100%': { backgroundPosition: '200% center' },
-                            },
-                            subtleWave: {
-                                '0%, 100%': { transform: 'translateY(0)' },
-                                '50%': { transform: 'translateY(-6px)' },
-                            }
-                        }
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                        "eth-blue": "#627EEA",
+                        "eth-yellow": "#F7C325",
                     },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'blink-yellow': 'blinkYellow 2s ease-in-out infinite',
+                        'confetti-fall': 'confettiFall 4s linear infinite',
+                        'shimmer-wave': 'shimmerWave 4s linear infinite',
+                        'subtle-wave': 'subtleWave 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        blinkYellow: {
+                            '0%, 100%': { opacity: 1, filter: 'drop-shadow(0 0 10px #F7C325)' },
+                            '50%': { opacity: 0.4, filter: 'drop-shadow(0 0 2px #F7C325)' },
+                        },
+                        confettiFall: {
+                            '0%': { transform: 'translateY(-10vh) rotate(0deg)', opacity: 1 },
+                            '100%': { transform: 'translateY(110vh) rotate(720deg)', opacity: 0 },
+                        },
+                        shimmerWave: {
+                            '0%': { backgroundPosition: '-200% center' },
+                            '100%': { backgroundPosition: '200% center' },
+                        },
+                        subtleWave: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        }
+                    }
                 },
+            },
             }
         }
     </script>

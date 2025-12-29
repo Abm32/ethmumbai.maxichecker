@@ -37,7 +37,7 @@ const App: React.FC = () => {
     } catch (error) {
       console.error('Error fetching X user info:', error);
     }
-    setLoading(false);
+      setLoading(false);
     return false;
   };
 

@@ -26,4 +26,5 @@ export interface UserStats {
 export interface XUserInfo {
   handle: string;
   name: string;
+  profileImageUrl?: string;
 }
