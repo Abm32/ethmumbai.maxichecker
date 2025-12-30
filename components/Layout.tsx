@@ -109,7 +109,17 @@ export const Footer: React.FC = () => (
       </div>
       
       <div className="flex flex-col md:flex-row items-center gap-3 sm:gap-4 md:gap-6">
-        <p className="text-white/60 text-xs sm:text-sm font-medium text-center">Built by ETHMumbai Superfans</p>
+        <p className="text-white/60 text-xs sm:text-sm font-medium text-center">
+          Built by{' '}
+          <a 
+            href="https://abhimanyurb.com" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-white/80 hover:text-white transition-colors underline decoration-white/40 hover:decoration-white underline-offset-2"
+          >
+            Abhimanyu R B
+          </a>
+        </p>
         <div className="hidden md:block w-1 h-1 bg-white/40 rounded-full"></div>
         <div className="flex gap-3 sm:gap-4 text-xs sm:text-sm font-bold tracking-wide">
           <a 

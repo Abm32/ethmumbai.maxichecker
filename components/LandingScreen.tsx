@@ -37,82 +37,15 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onStart, onXHandle
 
   return (
     <div className="relative flex flex-col min-h-screen overflow-hidden">
-      {/* Mumbai Skyline - Top Layer */}
+      {/* Mumbai Background Image */}
       <div className="fixed top-0 left-0 right-0 bottom-0 z-0 pointer-events-none">
-        {/* Left side buildings - Gateway of India area */}
-        <div className="absolute left-0 bottom-24 sm:bottom-28 md:bottom-32 lg:bottom-40 w-32 sm:w-40 md:w-48 lg:w-72 h-28 sm:h-32 md:h-40 lg:h-56 opacity-50">
-          {/* Gateway of India inspired structure */}
-          <svg viewBox="0 0 200 200" className="w-full h-full fill-current text-red-950/80">
-            {/* Main arch structure */}
-            <rect x="40" y="120" width="120" height="80" />
-            <rect x="50" y="100" width="100" height="20" />
-            {/* Central dome */}
-            <circle cx="100" cy="80" r="25" />
-            <rect x="90" y="80" width="20" height="40" />
-            {/* Side towers */}
-            <rect x="30" y="140" width="15" height="60" />
-            <rect x="155" y="140" width="15" height="60" />
-            {/* Arches */}
-            <circle cx="70" cy="160" r="15" fill="currentColor" opacity="0.3" />
-            <circle cx="100" cy="160" r="15" fill="currentColor" opacity="0.3" />
-            <circle cx="130" cy="160" r="15" fill="currentColor" opacity="0.3" />
-            {/* Windows */}
-            <rect x="60" y="130" width="8" height="12" fill="currentColor" opacity="0.4" />
-            <rect x="75" y="130" width="8" height="12" fill="currentColor" opacity="0.4" />
-            <rect x="117" y="130" width="8" height="12" fill="currentColor" opacity="0.4" />
-            <rect x="132" y="130" width="8" height="12" fill="currentColor" opacity="0.4" />
-          </svg>
-        </div>
-
-        {/* Right side - Bandra-Worli Sea Link Bridge */}
-        <div className="absolute right-0 bottom-24 sm:bottom-28 md:bottom-32 lg:bottom-40 w-40 sm:w-52 md:w-64 lg:w-96 h-24 sm:h-28 md:h-32 lg:h-48 opacity-50">
-          <svg viewBox="0 0 300 150" className="w-full h-full">
-            {/* Bridge cables */}
-            <g className="stroke-current text-red-950/80" fill="none">
-              {/* Main towers */}
-              <line x1="220" y1="40" x2="220" y2="150" strokeWidth="4" />
-              <line x1="210" y1="40" x2="210" y2="150" strokeWidth="4" />
-              {/* Cables from left tower */}
-              {[...Array(15)].map((_, i) => (
-                <line key={`left-${i}`} x1="210" y1="40" x2={150 - i * 10} y2="145" strokeWidth="1" opacity="0.6" />
-              ))}
-              {/* Cables from right tower */}
-              {[...Array(15)].map((_, i) => (
-                <line key={`right-${i}`} x1="220" y1="40" x2={230 + i * 5} y2="145" strokeWidth="1" opacity="0.6" />
-              ))}
-            </g>
-            {/* Road deck */}
-            <rect x="0" y="145" width="300" height="6" className="fill-current text-red-950/80" />
-          </svg>
-        </div>
-
-        {/* Center buildings skyline */}
-        <div className="absolute left-1/2 -translate-x-1/2 bottom-24 sm:bottom-28 md:bottom-32 lg:bottom-40 flex items-end gap-1 sm:gap-1.5 md:gap-2 lg:gap-4 opacity-40">
-          {/* Modern skyscrapers */}
-          <div className="w-5 sm:w-6 md:w-8 lg:w-12 h-16 sm:h-20 md:h-24 lg:h-32 bg-red-950/70">
-            <div className="grid grid-cols-2 gap-0.5 sm:gap-1 p-0.5 sm:p-1">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="w-full h-1 sm:h-2 bg-red-800/40"></div>
-              ))}
-            </div>
-          </div>
-          <div className="w-4 sm:w-5 md:w-6 lg:w-10 h-14 sm:h-16 md:h-20 lg:h-28 bg-red-950/70">
-            <div className="grid grid-cols-2 gap-0.5 sm:gap-1 p-0.5 sm:p-1">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="w-full h-1 sm:h-2 bg-red-800/40"></div>
-              ))}
-            </div>
-          </div>
-          <div className="w-6 sm:w-8 md:w-10 lg:w-14 h-20 sm:h-24 md:h-32 lg:h-40 bg-red-950/70">
-            <div className="grid grid-cols-2 gap-0.5 sm:gap-1 p-0.5 sm:p-1">
-              {[...Array(10)].map((_, i) => (
-                <div key={i} className="w-full h-1 sm:h-2 bg-red-800/40"></div>
-              ))}
-            </div>
-          </div>
-          <div className="w-[18px] sm:w-[22px] md:w-7 lg:w-11 h-[72px] sm:h-[88px] md:h-28 lg:h-36 bg-red-950/70"></div>
-          <div className="w-[22px] sm:w-[26px] md:w-9 lg:w-[52px] h-16 sm:h-20 md:h-[104px] lg:h-[136px] bg-red-950/70"></div>
-        </div>
+        <img 
+          src="/bg.png" 
+          alt="Mumbai skyline" 
+          className="w-full h-full object-cover object-center opacity-20"
+        />
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60"></div>
       </div>
 
       {/* Decorative Yellow Border Pattern - Bottom */}
