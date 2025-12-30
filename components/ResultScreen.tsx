@@ -130,97 +130,78 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
     
     try {
       const originalElement = cardRef.current;
-      const originalTransform = originalElement.style.transform;
-      const originalTransition = originalElement.style.transition;
-      const finalScore = stats.score;
-      
-      // Disable animations and set final score for capture
-      originalElement.style.transform = 'none';
-      originalElement.style.transition = 'none';
-      originalElement.classList.add('no-animations');
-      
-      // Update score and rank displays to final values
-      const scoreElements = originalElement.querySelectorAll('[data-score-display]');
-      scoreElements.forEach((el) => {
-        const htmlEl = el as HTMLElement;
-        htmlEl.textContent = `SCORE: ${finalScore.toLocaleString()} / 100`;
-      });
-      
-      const rankElements = originalElement.querySelectorAll('[data-rank-display]');
-      rankElements.forEach((el) => {
-        const htmlEl = el as HTMLElement;
-        htmlEl.textContent = getRankText(finalScore);
-      });
-      
-      // Hide or disable animated dots
-      const animatedDotsElements = originalElement.querySelectorAll('[data-animated-dots]');
-      animatedDotsElements.forEach((el) => {
-        const htmlEl = el as HTMLElement;
-        htmlEl.style.display = 'none';
-      });
 
-      // Wait for DOM to update
-      await new Promise(resolve => setTimeout(resolve, 50));
+      // Wait for DOM to be fully rendered
+      await new Promise(resolve => setTimeout(resolve, 200));
 
       if (!(window as any).html2canvas) {
         throw new Error("html2canvas library not loaded");
       }
 
+      // Capture exactly as displayed - no modifications
       const canvas = await (window as any).html2canvas(originalElement, {
         backgroundColor: '#0f0505',
-        scale: 2, 
+        scale: 2,
         useCORS: true,
         allowTaint: true,
         logging: false,
+        imageTimeout: 0,
+        foreignObjectRendering: false,
+        removeContainer: false,
         onclone: (clonedDoc: Document) => {
-          // Ensure final values are shown in cloned document
           const clonedElement = clonedDoc.querySelector('[data-card-ref]') as HTMLElement;
           if (clonedElement) {
-            clonedElement.classList.add('no-animations');
-            // Disable all animations in cloned document
+            // Only disable animations to prevent artifacts
             const style = clonedDoc.createElement('style');
             style.textContent = `
-              .no-animations * {
+              *, *::before, *::after {
                 animation: none !important;
                 transition: none !important;
               }
             `;
             clonedDoc.head.appendChild(style);
             
-            // Update score displays
-            const scoreDisplays = clonedElement.querySelectorAll('[data-score-display]');
-            scoreDisplays.forEach((el) => {
-              const htmlEl = el as HTMLElement;
-              htmlEl.textContent = `SCORE: ${finalScore.toLocaleString()} / 100`;
-            });
+            // Adjust positioning for each element individually in exported image
+            // Card Header - keep as is or adjust if needed
+            const cardHeader = clonedElement.querySelector('[data-card-header]') as HTMLElement;
+            if (cardHeader) {
+              // cardHeader.style.transform = 'translateY(-5px)'; // Uncomment to move header up
+            }
             
-            // Update rank displays
-            const rankDisplays = clonedElement.querySelectorAll('[data-rank-display]');
-            rankDisplays.forEach((el) => {
-              const htmlEl = el as HTMLElement;
-              htmlEl.textContent = getRankText(finalScore);
-            });
+            // Card Body - reduce padding to move content up
+            const cardBody = clonedElement.querySelector('[data-card-body]') as HTMLElement;
+            if (cardBody) {
+              cardBody.style.paddingTop = '0px';
+              cardBody.style.marginTop = '-20px';
+            }
             
-            // Hide animated dots in cloned document
-            const clonedAnimatedDots = clonedElement.querySelectorAll('[data-animated-dots]');
-            clonedAnimatedDots.forEach((el) => {
-              const htmlEl = el as HTMLElement;
-              htmlEl.style.display = 'none';
-            });
+            // Profile Section - adjust spacing
+            const profileSection = clonedElement.querySelector('[data-profile-section]') as HTMLElement;
+            if (profileSection) {
+              profileSection.style.marginBottom = '16px';
+            }
+            
+            // User Info Section - move up
+            const userInfoSection = clonedElement.querySelector('[data-user-info-section]') as HTMLElement;
+            if (userInfoSection) {
+              userInfoSection.style.marginTop = '-12px';
+              userInfoSection.style.marginBottom = '16px';
+            }
+            
+            // Score Bar - keep as is or adjust if needed
+            const scoreBar = clonedElement.querySelector('[data-score-bar]') as HTMLElement;
+            if (scoreBar) {
+              // scoreBar.style.marginTop = '-10px'; // Uncomment to move score bar up
+            }
+            
+            // Card Footer - keep as is or adjust if needed
+            const cardFooter = clonedElement.querySelector('[data-card-footer]') as HTMLElement;
+            if (cardFooter) {
+              // cardFooter.style.marginTop = '-10px'; // Uncomment to move footer up
+            }
           }
         }
       });
-      
-      // Restore animated dots visibility
-      animatedDotsElements.forEach((el) => {
-        const htmlEl = el as HTMLElement;
-        htmlEl.style.display = '';
-      });
-      
-      // Restore original styles
-      originalElement.style.transform = originalTransform;
-      originalElement.style.transition = originalTransition;
-      originalElement.classList.remove('no-animations');
       
       return canvas.toDataURL('image/png', 1.0);
     } catch (err) {
@@ -325,7 +306,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
               {/* Card Header */}
               <div className={`h-20 sm:h-24 md:h-28 bg-gradient-to-b flex items-center justify-between px-4 sm:px-5 md:px-6 pt-3 sm:pt-4 relative overflow-hidden transition-colors duration-1000 ${
                 isUltraMaxi ? 'from-[#1a224a] to-[#0a0f2a]' : 'from-[#2a1212] to-[#1a0a0a]'
-              }`}>
+              }`} data-card-header>
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `radial-gradient(${isUltraMaxi ? '#627EEA' : '#ec1313'} 1px, transparent 1px)`, backgroundSize: '8px 8px' }}></div>
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 sm:gap-3">
@@ -345,9 +326,9 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
               </div>
 
               {/* Card Body */}
-              <div className="flex-1 bg-[#1a0a0a] relative flex flex-col items-center pt-4 sm:pt-6 md:pt-8">
+              <div className="flex-1 bg-[#1a0a0a] relative flex flex-col items-center pt-4 sm:pt-6 md:pt-8" data-card-body>
                 {/* Profile Image with Rank Badge */}
-                <div className="relative mb-4 sm:mb-5 md:mb-6 flex flex-col items-center">
+                <div className="relative mb-4 sm:mb-5 md:mb-6 flex flex-col items-center" data-profile-section>
                   {/* Profile Image Circle */}
                   <div className={`relative size-32 sm:size-36 md:size-40 rounded-full overflow-hidden border-[3px] sm:border-4 transition-all duration-1000 shadow-[0_0_30px_rgba(0,0,0,0.3)] ${
                     isUltraMaxi ? 'border-eth-blue shadow-[0_0_40px_rgba(98,126,234,0.6)]' : 'border-primary'
@@ -424,18 +405,13 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                       <span className="text-[10px] sm:text-xs font-black text-white tracking-wider uppercase leading-none text-center whitespace-nowrap" data-rank-display>
                         {getRankText(displayScore)}
                       </span>
-                      <div className="flex gap-0.5 sm:gap-1 mt-0.5 sm:mt-1 justify-center items-center" data-animated-dots>
-                        <span className="size-1 sm:size-1.5 bg-eth-yellow rounded-full animate-blink-yellow"></span>
-                        <span className="size-1 sm:size-1.5 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.2s' }}></span>
-                        <span className="size-1 sm:size-1.5 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.4s' }}></span>
-                      </div>
                     </div>
                   </div>
                 </div>
 
                 {/* User Info */}
-                <div className="w-full px-4 sm:px-6 md:px-8 text-center mt-2 mb-4 sm:mb-6 md:mb-8 flex flex-col items-center">
-                  <h2 className={`text-xl sm:text-2xl md:text-3xl font-black italic tracking-tight uppercase leading-none mb-2 sm:mb-3 break-words transition-colors hover:text-eth-yellow cursor-default ${isUltraMaxi ? 'text-eth-blue' : 'text-white'}`}>
+                <div className="w-full px-4 sm:px-6 md:px-8 text-center flex flex-col items-center" data-user-info-section style={{ marginTop: '8px', marginBottom: '24px' }}>
+                  <h2 className={`text-xl sm:text-2xl md:text-3xl font-black italic tracking-tight uppercase leading-none break-words transition-colors hover:text-eth-yellow cursor-default ${isUltraMaxi ? 'text-eth-blue' : 'text-white'}`} style={{ marginBottom: '12px' }}>
                     {stats.aiTitle || 'GIGA CHAD'}
                   </h2>
                   {xUserInfo && (
@@ -461,7 +437,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                 </div>
 
                 {/* Score Bar */}
-                <div className="w-full h-12 sm:h-14 bg-eth-yellow relative flex items-center justify-center overflow-hidden shadow-[0_10px_30px_rgba(247,195,37,0.2)] border-y-2 border-white/20 transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_25px_rgba(247,195,37,0.4)] group/score cursor-default">
+                <div className="w-full h-12 sm:h-14 bg-eth-yellow relative flex items-center justify-center overflow-hidden shadow-[0_10px_30px_rgba(247,195,37,0.2)] border-y-2 border-white/20 transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_25px_rgba(247,195,37,0.4)] group/score cursor-default" data-score-bar>
                   <div className="absolute inset-0 opacity-20 transition-transform duration-500 group-hover/score:scale-110" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, #000 10px, #000 20px)' }}></div>
                   <div className="relative z-10 flex flex-col items-center px-2">
                     <span className="text-black font-black text-base sm:text-lg md:text-xl tracking-[0.1em] sm:tracking-[0.2em] uppercase leading-none transition-transform duration-300 group-hover/score:scale-105" data-score-display>
@@ -473,7 +449,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
               </div>
 
               {/* Card Footer */}
-              <div className="h-20 sm:h-24 bg-[#0f0505] flex items-center justify-between px-4 sm:px-5 md:px-6 border-t border-white/10 relative transition-colors hover:bg-black group/footer">
+              <div className="h-20 sm:h-24 bg-[#0f0505] flex items-center justify-between px-4 sm:px-5 md:px-6 border-t border-white/10 relative transition-colors hover:bg-black group/footer" data-card-footer>
                 <div className="flex flex-col max-w-[65%] sm:max-w-[70%]">
                    <span className="text-white/40 text-[8px] sm:text-[9px] uppercase font-bold tracking-widest mb-0.5 sm:mb-1 transition-colors group-hover/footer:text-primary">Vibe Status</span>
                    <p className="text-gray-300 text-[10px] sm:text-xs font-medium italic leading-tight transition-colors group-hover/footer:text-white">
