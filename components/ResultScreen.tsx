@@ -303,19 +303,19 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
       <Header xUserInfo={xUserInfo} onLogoClick={onLogoClick} />
       {isUltraMaxi && <ConfettiAnimation />}
       
-      <main className="relative z-10 flex-grow flex flex-col items-center justify-center py-8 px-4 w-full max-w-7xl mx-auto">
+      <main className="relative z-10 flex-grow flex flex-col items-center justify-center py-4 md:py-8 px-2 sm:px-4 w-full max-w-7xl mx-auto">
         {/* Background glows */}
-        <div className={`absolute top-1/4 -left-20 w-64 h-64 rounded-full blur-[100px] pointer-events-none transition-all duration-1000 ${isUltraMaxi ? 'bg-eth-yellow/30' : 'bg-primary/20'}`}></div>
-        <div className={`absolute bottom-1/4 -right-20 w-80 h-80 rounded-full blur-[100px] pointer-events-none transition-all duration-1000 ${isUltraMaxi ? 'bg-eth-blue/40' : 'bg-eth-blue/20'}`}></div>
+        <div className={`absolute top-1/4 -left-10 md:-left-20 w-32 h-32 md:w-64 md:h-64 rounded-full blur-[100px] pointer-events-none transition-all duration-1000 ${isUltraMaxi ? 'bg-eth-yellow/30' : 'bg-primary/20'}`}></div>
+        <div className={`absolute bottom-1/4 -right-10 md:-right-20 w-40 h-40 md:w-80 md:h-80 rounded-full blur-[100px] pointer-events-none transition-all duration-1000 ${isUltraMaxi ? 'bg-eth-blue/40' : 'bg-eth-blue/20'}`}></div>
         
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center w-full">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-12 lg:gap-24 items-center w-full">
           
           {/* The High-Res Maxi Card */}
           <div className="flex justify-center lg:justify-end perspective-1000 order-2 lg:order-1">
             <div 
               ref={cardRef}
               data-card-ref
-              className={`relative w-[320px] sm:w-[350px] h-[600px] bg-neutral-900 clip-chamfer border-[6px] shadow-[0_20px_60px_-15px_rgba(236,19,19,0.5)] flex flex-col group transition-all duration-500 hover:scale-[1.02] ${
+              className={`relative w-[280px] sm:w-[320px] md:w-[350px] h-[520px] sm:h-[560px] md:h-[600px] bg-neutral-900 clip-chamfer border-[4px] sm:border-[6px] shadow-[0_20px_60px_-15px_rgba(236,19,19,0.5)] flex flex-col group transition-all duration-500 hover:scale-[1.02] ${
               isUltraMaxi ? 'border-eth-blue shadow-[0_25px_80px_-10px_rgba(98,126,234,0.7)]' : 'border-[#3A1E1E]'
             }`}>
               
@@ -323,33 +323,33 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
               <div className="absolute inset-3 border border-white/10 z-10 clip-chamfer pointer-events-none"></div>
               
               {/* Card Header */}
-              <div className={`h-28 bg-gradient-to-b flex items-center justify-between px-6 pt-4 relative overflow-hidden transition-colors duration-1000 ${
+              <div className={`h-20 sm:h-24 md:h-28 bg-gradient-to-b flex items-center justify-between px-4 sm:px-5 md:px-6 pt-3 sm:pt-4 relative overflow-hidden transition-colors duration-1000 ${
                 isUltraMaxi ? 'from-[#1a224a] to-[#0a0f2a]' : 'from-[#2a1212] to-[#1a0a0a]'
               }`}>
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: `radial-gradient(${isUltraMaxi ? '#627EEA' : '#ec1313'} 1px, transparent 1px)`, backgroundSize: '8px 8px' }}></div>
                 <div className="relative z-10">
-                  <div className="flex items-center gap-3">
-                    <div className="size-10 flex items-center justify-center bg-white/10 rounded-lg backdrop-blur-md border border-white/20">
-                      <EthMumbaiLogo className="size-8" />
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="size-8 sm:size-9 md:size-10 flex items-center justify-center bg-white/10 rounded-lg backdrop-blur-md border border-white/20">
+                      <EthMumbaiLogo className="size-6 sm:size-7 md:size-8" />
                     </div>
                     <div className="flex flex-col">
-                      <span className="font-bold text-white text-xl tracking-tighter leading-none uppercase">ETHMumbai</span>
-                      <span className="text-[8px] text-white/40 uppercase tracking-[0.3em] font-bold">Official Digital ID</span>
+                      <span className="font-bold text-white text-base sm:text-lg md:text-xl tracking-tighter leading-none uppercase">ETHMumbai</span>
+                      <span className="text-[7px] sm:text-[8px] text-white/40 uppercase tracking-[0.3em] font-bold">Official Digital ID</span>
                     </div>
                   </div>
                 </div>
                 <div className="relative z-10 flex flex-col items-end">
-                  <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Status</span>
-                  <span className={`text-white font-mono text-sm border-b pb-0.5 ${isUltraMaxi ? 'border-eth-blue' : 'border-primary/40'}`}>ACTIVE</span>
+                  <span className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-widest font-bold">Status</span>
+                  <span className={`text-white font-mono text-xs sm:text-sm border-b pb-0.5 ${isUltraMaxi ? 'border-eth-blue' : 'border-primary/40'}`}>ACTIVE</span>
                 </div>
               </div>
 
               {/* Card Body */}
-              <div className="flex-1 bg-[#1a0a0a] relative flex flex-col items-center pt-8">
+              <div className="flex-1 bg-[#1a0a0a] relative flex flex-col items-center pt-4 sm:pt-6 md:pt-8">
                 {/* Profile Image with Rank Badge */}
-                <div className="relative mb-6 flex flex-col items-center">
+                <div className="relative mb-4 sm:mb-5 md:mb-6 flex flex-col items-center">
                   {/* Profile Image Circle */}
-                  <div className={`relative size-40 rounded-full overflow-hidden border-4 transition-all duration-1000 shadow-[0_0_30px_rgba(0,0,0,0.3)] ${
+                  <div className={`relative size-32 sm:size-36 md:size-40 rounded-full overflow-hidden border-[3px] sm:border-4 transition-all duration-1000 shadow-[0_0_30px_rgba(0,0,0,0.3)] ${
                     isUltraMaxi ? 'border-eth-blue shadow-[0_0_40px_rgba(98,126,234,0.6)]' : 'border-primary'
                   }`}>
                     {xUserInfo?.profileImageUrl ? (
@@ -390,22 +390,22 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                         />
                         <div className="profile-placeholder hidden w-full h-full bg-gradient-to-br from-neutral-800 to-neutral-900 flex items-center justify-center absolute inset-0">
                           {xUserInfo.name ? (
-                            <span className="text-2xl font-black text-white/60">
+                            <span className="text-xl sm:text-2xl font-black text-white/60">
                               {xUserInfo.name.charAt(0).toUpperCase()}
                             </span>
                           ) : (
-                            <span className="material-symbols-outlined text-6xl text-white/20">person</span>
+                            <span className="material-symbols-outlined text-4xl sm:text-6xl text-white/20">person</span>
                           )}
                         </div>
                       </>
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-neutral-800 to-neutral-900 flex items-center justify-center">
                         {xUserInfo?.name ? (
-                          <span className="text-2xl font-black text-white/60">
+                          <span className="text-xl sm:text-2xl font-black text-white/60">
                             {xUserInfo.name.charAt(0).toUpperCase()}
                           </span>
                         ) : (
-                          <span className="material-symbols-outlined text-6xl text-white/20">person</span>
+                          <span className="material-symbols-outlined text-4xl sm:text-6xl text-white/20">person</span>
                         )}
                       </div>
                     )}
@@ -415,31 +415,31 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                   </div>
                   
                   {/* Rank Badge Overlay */}
-                  <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 px-5 py-2 rounded-full border-2 transition-all duration-1000 shadow-lg backdrop-blur-sm ${
+                  <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full border-2 transition-all duration-1000 shadow-lg backdrop-blur-sm ${
                     isUltraMaxi 
                       ? 'bg-eth-blue/90 border-eth-yellow shadow-[0_0_20px_rgba(98,126,234,0.6)]' 
                       : 'bg-primary/90 border-eth-yellow shadow-[0_0_20px_rgba(236,19,19,0.6)]'
                   }`}>
                     <div className="flex flex-col items-center justify-center">
-                      <span className="text-xs font-black text-white tracking-wider uppercase leading-none text-center whitespace-nowrap" data-rank-display>
+                      <span className="text-[10px] sm:text-xs font-black text-white tracking-wider uppercase leading-none text-center whitespace-nowrap" data-rank-display>
                         {getRankText(displayScore)}
                       </span>
-                      <div className="flex gap-1 mt-1 justify-center items-center" data-animated-dots>
-                        <span className="size-1.5 bg-eth-yellow rounded-full animate-blink-yellow"></span>
-                        <span className="size-1.5 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.2s' }}></span>
-                        <span className="size-1.5 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.4s' }}></span>
+                      <div className="flex gap-0.5 sm:gap-1 mt-0.5 sm:mt-1 justify-center items-center" data-animated-dots>
+                        <span className="size-1 sm:size-1.5 bg-eth-yellow rounded-full animate-blink-yellow"></span>
+                        <span className="size-1 sm:size-1.5 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.2s' }}></span>
+                        <span className="size-1 sm:size-1.5 bg-eth-yellow rounded-full animate-blink-yellow" style={{ animationDelay: '0.4s' }}></span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* User Info */}
-                <div className="w-full px-8 text-center mt-2 mb-8 flex flex-col items-center">
-                  <h2 className={`text-3xl font-black italic tracking-tight uppercase leading-none mb-3 break-words transition-colors hover:text-eth-yellow cursor-default ${isUltraMaxi ? 'text-eth-blue' : 'text-white'}`}>
+                <div className="w-full px-4 sm:px-6 md:px-8 text-center mt-2 mb-4 sm:mb-6 md:mb-8 flex flex-col items-center">
+                  <h2 className={`text-xl sm:text-2xl md:text-3xl font-black italic tracking-tight uppercase leading-none mb-2 sm:mb-3 break-words transition-colors hover:text-eth-yellow cursor-default ${isUltraMaxi ? 'text-eth-blue' : 'text-white'}`}>
                     {stats.aiTitle || 'GIGA CHAD'}
                   </h2>
                   {xUserInfo && (
-                    <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/40 cursor-default group/id">
+                    <div className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 sm:py-1.5 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/40 cursor-default group/id">
                       {xUserInfo.profileImageUrl ? (
                         <img 
                           src={xUserInfo.profileImageUrl} 
@@ -455,50 +455,50 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
                         </svg>
                       )}
-                      <span className="text-gray-300 font-medium text-xs tracking-wider group-hover/id:text-white">@{xUserInfo.handle}</span>
+                      <span className="text-gray-300 font-medium text-[10px] sm:text-xs tracking-wider group-hover/id:text-white">@{xUserInfo.handle}</span>
                     </div>
                   )}
                 </div>
 
                 {/* Score Bar */}
-                <div className="w-full h-14 bg-eth-yellow relative flex items-center justify-center overflow-hidden shadow-[0_10px_30px_rgba(247,195,37,0.2)] border-y-2 border-white/20 transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_25px_rgba(247,195,37,0.4)] group/score cursor-default">
+                <div className="w-full h-12 sm:h-14 bg-eth-yellow relative flex items-center justify-center overflow-hidden shadow-[0_10px_30px_rgba(247,195,37,0.2)] border-y-2 border-white/20 transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_25px_rgba(247,195,37,0.4)] group/score cursor-default">
                   <div className="absolute inset-0 opacity-20 transition-transform duration-500 group-hover/score:scale-110" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, #000 10px, #000 20px)' }}></div>
-                  <div className="relative z-10 flex flex-col items-center">
-                    <span className="text-black font-black text-xl tracking-[0.2em] uppercase leading-none transition-transform duration-300 group-hover/score:scale-105" data-score-display>
+                  <div className="relative z-10 flex flex-col items-center px-2">
+                    <span className="text-black font-black text-base sm:text-lg md:text-xl tracking-[0.1em] sm:tracking-[0.2em] uppercase leading-none transition-transform duration-300 group-hover/score:scale-105" data-score-display>
                       SCORE: {displayScore.toLocaleString()} / 100
                     </span>
-                    <span className="text-black/60 text-[8px] font-bold uppercase tracking-widest mt-1">Proof of Loyalty</span>
+                    <span className="text-black/60 text-[7px] sm:text-[8px] font-bold uppercase tracking-widest mt-0.5 sm:mt-1">Proof of Loyalty</span>
                   </div>
                 </div>
               </div>
 
               {/* Card Footer */}
-              <div className="h-24 bg-[#0f0505] flex items-center justify-between px-6 border-t border-white/10 relative transition-colors hover:bg-black group/footer">
-                <div className="flex flex-col max-w-[70%]">
-                   <span className="text-white/40 text-[9px] uppercase font-bold tracking-widest mb-1 transition-colors group-hover/footer:text-primary">Vibe Status</span>
-                   <p className="text-gray-300 text-xs font-medium italic leading-tight transition-colors group-hover/footer:text-white">
+              <div className="h-20 sm:h-24 bg-[#0f0505] flex items-center justify-between px-4 sm:px-5 md:px-6 border-t border-white/10 relative transition-colors hover:bg-black group/footer">
+                <div className="flex flex-col max-w-[65%] sm:max-w-[70%]">
+                   <span className="text-white/40 text-[8px] sm:text-[9px] uppercase font-bold tracking-widest mb-0.5 sm:mb-1 transition-colors group-hover/footer:text-primary">Vibe Status</span>
+                   <p className="text-gray-300 text-[10px] sm:text-xs font-medium italic leading-tight transition-colors group-hover/footer:text-white">
                     {isHighEnoughForEasterEgg 
-                      ? "You’re clearly one of us. When’s the next ETHMumbai?" 
+                      ? "You're clearly one of us. When's the next ETHMumbai?" 
                       : `"${stats.aiDescription || 'Built different. Mumbai energy.'}"`}
                   </p>
                 </div>
                 <div className="flex flex-col items-center opacity-60 transition-opacity group-hover/footer:opacity-100">
-                  <span className="material-symbols-outlined text-4xl text-white/40">verified</span>
-                  <span className="text-[7px] text-white/40 font-mono">VERIFIED</span>
+                  <span className="material-symbols-outlined text-2xl sm:text-3xl md:text-4xl text-white/40">verified</span>
+                  <span className="text-[6px] sm:text-[7px] text-white/40 font-mono">VERIFIED</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Right Content */}
-          <div className="flex flex-col items-start space-y-8 max-w-lg order-1 lg:order-2 text-center lg:text-left mx-auto lg:mx-0">
+          <div className="flex flex-col items-start space-y-4 sm:space-y-6 md:space-y-8 max-w-lg order-1 lg:order-2 text-center lg:text-left mx-auto lg:mx-0 px-2 sm:px-0">
             <div>
-              <div className={`inline-block px-3 py-1 border rounded text-[10px] font-bold uppercase tracking-[0.2em] mb-4 transition-colors duration-1000 ${
+              <div className={`inline-block px-2 sm:px-3 py-0.5 sm:py-1 border rounded text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] mb-3 sm:mb-4 transition-colors duration-1000 ${
                 isUltraMaxi ? 'bg-eth-yellow/10 border-eth-yellow text-eth-yellow' : 'bg-white/10 border-white text-white'
               }`}>
                 {getFullRankLabel(stats.score)}
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-black text-white leading-[1.0] mb-6">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-black text-white leading-[1.0] mb-4 sm:mb-5 md:mb-6">
                 CLAIM YOUR <br/>
                 <span className="inline-block relative">
                   {"LEGACY ON CHAIN".split(" ").map((word, i) => (
@@ -520,63 +520,63 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({ stats, onReset, onLo
                 </span>
               </h1>
               {isUltraMaxi && (
-                <div className="bg-eth-blue/20 border border-eth-blue/50 p-4 rounded mb-6 animate-pulse">
-                   <span className="text-white font-bold uppercase text-xs tracking-widest drop-shadow-[0_0_8px_rgba(98,126,234,0.8)]">🏆 ACHIEVEMENT UNLOCKED</span>
-                   <p className="text-white font-bold text-lg">ETHMumbai Ultra Maxi</p>
+                <div className="bg-eth-blue/20 border border-eth-blue/50 p-3 sm:p-4 rounded mb-4 sm:mb-5 md:mb-6 animate-pulse">
+                   <span className="text-white font-bold uppercase text-[10px] sm:text-xs tracking-widest drop-shadow-[0_0_8px_rgba(98,126,234,0.8)]">🏆 ACHIEVEMENT UNLOCKED</span>
+                   <p className="text-white font-bold text-base sm:text-lg">ETHMumbai Ultra Maxi</p>
                 </div>
               )}
-              <p className="text-gray-400 text-lg leading-relaxed font-medium">
+              <p className="text-gray-400 text-sm sm:text-base md:text-lg leading-relaxed font-medium">
                 You've successfully scanned your Mumbai frequency. You aren't just an attendee; you're the backbone of this ecosystem.
               </p>
             </div>
 
-            <div className="flex flex-col w-full gap-5">
+            <div className="flex flex-col w-full gap-3 sm:gap-4 md:gap-5">
               <button 
                 onClick={handleDownload}
                 disabled={isProcessing}
-                className="w-full group relative overflow-hidden bg-white hover:bg-gray-100 disabled:opacity-70 transition-all h-20 flex items-center justify-between px-8 clip-chamfer shadow-[0_8px_30px_rgba(255,255,255,0.1)] btn-mechanical"
+                className="w-full group relative overflow-hidden bg-white hover:bg-gray-100 disabled:opacity-70 transition-all h-16 md:h-20 flex items-center justify-between px-4 sm:px-6 md:px-8 clip-chamfer shadow-[0_8px_30px_rgba(255,255,255,0.1)] btn-mechanical"
               >
-                <div className="flex items-center gap-5">
-                  <div className={`size-12 bg-black/5 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition-colors ${isProcessing ? 'animate-spin' : ''}`}>
-                    <span className="material-symbols-outlined text-black text-2xl group-hover:text-primary transition-colors">
+                <div className="flex items-center gap-3 sm:gap-4 md:gap-5">
+                  <div className={`size-10 sm:size-11 md:size-12 bg-black/5 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition-colors ${isProcessing ? 'animate-spin' : ''}`}>
+                    <span className="material-symbols-outlined text-black text-xl sm:text-2xl group-hover:text-primary transition-colors">
                       {isProcessing ? 'sync' : 'download'}
                     </span>
                   </div>
                   <div className="flex flex-col items-start text-left">
-                    <span className="text-black font-black text-lg leading-none mb-1 uppercase italic tracking-tighter">
+                    <span className="text-black font-black text-base sm:text-lg leading-none mb-0.5 sm:mb-1 uppercase italic tracking-tighter">
                       {isProcessing ? 'Generating...' : 'Download ID'}
                     </span>
-                    <span className="text-gray-500 text-[10px] font-bold uppercase tracking-wider">High Fidelity Asset</span>
+                    <span className="text-gray-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">High Fidelity Asset</span>
                   </div>
                 </div>
-                <span className="material-symbols-outlined text-black/20 group-hover:text-black group-hover:translate-x-1 transition-all">chevron_right</span>
+                <span className="material-symbols-outlined text-black/20 group-hover:text-black group-hover:translate-x-1 transition-all hidden sm:inline">chevron_right</span>
               </button>
 
               <button 
                 onClick={shareOnX}
                 disabled={isProcessing}
-                className="w-full group relative overflow-hidden bg-[#000000] border border-white/20 hover:border-white disabled:opacity-70 transition-all h-20 flex items-center justify-between px-8 clip-chamfer shadow-[0_8px_30px_rgba(0,0,0,0.5)] btn-mechanical"
+                className="w-full group relative overflow-hidden bg-[#000000] border border-white/20 hover:border-white disabled:opacity-70 transition-all h-16 md:h-20 flex items-center justify-between px-4 sm:px-6 md:px-8 clip-chamfer shadow-[0_8px_30px_rgba(0,0,0,0.5)] btn-mechanical"
               >
-                <div className="flex items-center gap-5">
-                  <div className="size-12 bg-white/10 rounded-full flex items-center justify-center">
-                    <svg className="w-6 h-6 fill-white" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+                <div className="flex items-center gap-3 sm:gap-4 md:gap-5">
+                  <div className="size-10 sm:size-11 md:size-12 bg-white/10 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-white" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
                   </div>
                   <div className="flex flex-col items-start text-left">
-                    <span className="text-white font-black text-lg leading-none mb-1 uppercase italic tracking-tighter">
+                    <span className="text-white font-black text-base sm:text-lg leading-none mb-0.5 sm:mb-1 uppercase italic tracking-tighter">
                       {isProcessing ? 'Processing...' : 'Share to X'}
                     </span>
-                    <span className="text-white/40 text-[10px] font-bold uppercase tracking-wider">Flex your status</span>
+                    <span className="text-white/40 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Flex your status</span>
                   </div>
                 </div>
-                <span className="material-symbols-outlined text-white/20 group-hover:text-white group-hover:translate-x-1 transition-all">ios_share</span>
+                <span className="material-symbols-outlined text-white/20 group-hover:text-white group-hover:translate-x-1 transition-all hidden sm:inline">ios_share</span>
               </button>
 
-              <div className="flex items-center justify-center lg:justify-start gap-8 mt-4">
+              <div className="flex items-center justify-center lg:justify-start gap-6 sm:gap-8 mt-3 sm:mt-4">
                 <button 
                   onClick={onReset}
-                  className="group flex items-center gap-2 text-white/40 hover:text-white text-xs uppercase tracking-[0.2em] font-bold transition-colors btn-mechanical"
+                  className="group flex items-center gap-1.5 sm:gap-2 text-white/40 hover:text-white text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold transition-colors btn-mechanical"
                 >
-                  <span className="material-symbols-outlined text-sm group-hover:rotate-180 transition-transform duration-500">refresh</span>
+                  <span className="material-symbols-outlined text-xs sm:text-sm group-hover:rotate-180 transition-transform duration-500">refresh</span>
                   Retake Diagnostic
                 </button>
               </div>
