@@ -165,14 +165,36 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onStart, onXHandle
           {/* CTA Button */}
           {xUserInfo && (
             <div className="relative mt-1 sm:mt-2">
+              {/* Glowing orb effect behind button */}
+              <div className="absolute inset-0 bg-yellow-500/30 blur-3xl transform scale-150 animate-pulse"></div>
+              <div className="absolute inset-0 bg-red-500/20 blur-2xl transform scale-125"></div>
+              
               <button 
                 onClick={onStart}
-                className="relative group w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-52 lg:h-52 flex items-center justify-center bg-white/10 backdrop-blur-md text-white border-2 border-white/30 font-black text-lg sm:text-xl md:text-2xl uppercase tracking-tighter transform rotate-45 hover:scale-110 hover:bg-white/20 shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-white/50"
+                className="relative group w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 flex items-center justify-center backdrop-blur-md text-white font-black text-lg sm:text-xl md:text-2xl uppercase tracking-tighter transform rotate-45 hover:scale-105 hover:rotate-[48deg] transition-all duration-500 focus:outline-none overflow-hidden"
               >
-                <div className="transform -rotate-45 text-center px-2 sm:px-3 md:px-4 leading-none flex flex-col items-center gap-1 sm:gap-2">
-                  <span className="text-sm sm:text-base md:text-lg">Check My</span>
-                  <span className="text-xl sm:text-2xl md:text-3xl border-b-[3px] sm:border-b-4 border-white pb-0.5 sm:pb-1">Maxi Score</span>
-                  <span className="material-symbols-outlined mt-1 sm:mt-2 text-2xl sm:text-3xl animate-bounce">expand_more</span>
+                {/* Multiple layered borders matching diamond */}
+                <div className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] border-[4px] sm:border-[5px] md:border-[6px] border-yellow-500 group-hover:border-yellow-400 transition-colors duration-300"></div>
+                <div className="absolute inset-[2px] sm:inset-[3px] md:inset-[4px] rounded-[1.4rem] sm:rounded-[1.9rem] md:rounded-[2.4rem] border-[2px] sm:border-[3px] border-yellow-600/80 group-hover:border-yellow-500/90 transition-colors duration-300"></div>
+                <div className="absolute inset-[4px] sm:inset-[6px] md:inset-[8px] rounded-[1.3rem] sm:rounded-[1.8rem] md:rounded-[2.3rem] border border-white/60"></div>
+                
+                {/* Gradient background with animation */}
+                <div className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-yellow-500/30 via-yellow-600/20 to-red-600/30 group-hover:from-yellow-400/40 group-hover:via-yellow-500/30 group-hover:to-red-500/40 transition-all duration-300"></div>
+                
+                {/* Shine effect on hover */}
+                <div className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-tr from-transparent via-white/0 to-transparent group-hover:via-white/20 transition-all duration-500 group-hover:animate-shimmer"></div>
+                
+                {/* Top highlight */}
+                <div className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-b from-yellow-400/20 via-transparent to-transparent"></div>
+                
+                {/* Inner shadow */}
+                <div className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] shadow-[inset_0_2px_20px_rgba(234,179,8,0.3)]"></div>
+                
+                {/* Button content - counter-rotated */}
+                <div className="relative transform -rotate-45 group-hover:-rotate-[48deg] text-center px-3 sm:px-4 md:px-5 leading-none flex flex-col items-center gap-1.5 sm:gap-2.5 transition-all duration-500 z-10">
+                  <span className="text-xs sm:text-sm md:text-base font-bold tracking-wider text-yellow-200 group-hover:text-yellow-100 transition-colors">Check My</span>
+                  <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black border-b-[3px] sm:border-b-4 border-yellow-400 group-hover:border-yellow-300 pb-1 sm:pb-1.5 text-white group-hover:text-yellow-50 transition-all duration-300">Maxi Score</span>
+                  <span className="material-symbols-outlined mt-1 sm:mt-2 text-2xl sm:text-3xl md:text-4xl animate-bounce text-yellow-300 group-hover:text-yellow-200 transition-colors">expand_more</span>
                 </div>
               </button>
             </div>
