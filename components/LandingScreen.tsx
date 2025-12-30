@@ -77,13 +77,36 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onStart, onXHandle
           
           {/* Main Diamond Illustration */}
           <div className="relative group perspective-1000">
-            <div className="absolute inset-0 bg-white/20 transform rotate-45 rounded-[2rem] sm:rounded-[2.5rem] blur-2xl animate-pulse-slow"></div>
+            {/* Outer glow effect - has reduced opacity */}
+            <div className="absolute inset-0 bg-red-500/40 transform rotate-45 rounded-[2rem] sm:rounded-[2.5rem] blur-3xl opacity-30"></div>
+            <div className="absolute inset-0 bg-red-600/30 transform rotate-45 rounded-[2rem] sm:rounded-[2.5rem] blur-2xl opacity-30"></div>
+            <div className="absolute inset-0 bg-white/20 transform rotate-45 rounded-[2rem] sm:rounded-[2.5rem] blur-xl opacity-30"></div>
+            
             {/* The Diamond Frame - Rotates +3 degrees from 45 to 48 */}
-            <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 border-[3px] sm:border-[4px] border-white/30 bg-gradient-to-br from-white/20 via-white/5 to-transparent backdrop-blur-md shadow-2xl transform rotate-45 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] flex items-center justify-center transition-all duration-500 group-hover:scale-105 group-hover:rotate-[48deg]">
-              <div className="absolute inset-0 rounded-[1.25rem] sm:rounded-[1.5rem] md:rounded-[2rem] bg-gradient-to-t from-transparent via-white/5 to-white/10 pointer-events-none"></div>
-              <div className="relative w-full h-full flex items-center justify-center animate-float">
+            <div className="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 transform rotate-45 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] flex items-center justify-center transition-all duration-500 group-hover:scale-105 group-hover:rotate-[48deg]">
+              {/* Outer border lining - more visible */}
+              <div className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] border-[4px] sm:border-[5px] md:border-[6px] border-red-500/95"></div>
+              {/* Multiple layered borders for depth */}
+              <div className="absolute inset-[2px] sm:inset-[3px] md:inset-[4px] rounded-[1.4rem] sm:rounded-[1.9rem] md:rounded-[2.4rem] border-[2px] sm:border-[3px] border-red-400/75"></div>
+              <div className="absolute inset-[4px] sm:inset-[6px] md:inset-[8px] rounded-[1.3rem] sm:rounded-[1.8rem] md:rounded-[2.3rem] border border-white/50"></div>
+              
+              {/* Glass background with gradient - very transparent to show background */}
+              <div className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-red-500/2 via-red-600/1 to-transparent backdrop-blur-sm"></div>
+              
+              {/* Top highlight shine - very transparent */}
+              <div className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-b from-red-400/3 via-transparent to-transparent pointer-events-none"></div>
+              
+              {/* Bottom subtle glow - very transparent */}
+              <div className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-t from-red-600/2 via-transparent to-transparent pointer-events-none"></div>
+              
+              {/* Inner shadow for depth - very transparent */}
+              <div className="absolute inset-0 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] shadow-[inset_0_2px_20px_rgba(236,19,19,0.03)]"></div>
+              
+              <div className="relative w-full h-full flex items-center justify-center animate-float z-10">
                 {/* The Official Logo - Counter-rotates to stay upright relative to the frame */}
-                <EthMumbaiLogo className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-52 lg:h-52 drop-shadow-2xl transform -rotate-45 group-hover:-rotate-[48deg] transition-all duration-500" />
+                <div className="opacity-100">
+                  <EthMumbaiLogo className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-52 lg:h-52 drop-shadow-2xl transform -rotate-45 group-hover:-rotate-[48deg] transition-all duration-500" />
+                </div>
               </div>
             </div>
           </div>

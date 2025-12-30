@@ -31,9 +31,9 @@ const App: React.FC = () => {
       }
     }
     return {
-      score: 0,
-      totalQuestions: QUIZ_QUESTIONS.length,
-      answers: [],
+    score: 0,
+    totalQuestions: QUIZ_QUESTIONS.length,
+    answers: [],
     };
   };
 
